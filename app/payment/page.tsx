@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react"
 
-const Page = () => {
+const PaymentForm = () => {
   const [coin, setCoin] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
@@ -51,4 +51,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default PaymentForm
