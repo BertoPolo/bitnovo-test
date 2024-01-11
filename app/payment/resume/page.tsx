@@ -1,14 +1,17 @@
 "use client"
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
+import { useRouter } from "next/router"
 
-// Componente que muestra el QR, pasar a otro componente a parte
-const PaymentQR = ({ orderInfo }: any) => {
-  // remove any type!!
+// Componente que muestra el QR, pasar a otro componente a parte?
+const PaymentQR = () => {
+  const router = useRouter()
+  const { price, coin, concept } = router.query
+
   return (
     <div>
       <h2>Detalles del Pago</h2>
-      <QRCode value={JSON.stringify(orderInfo)} />
+      <QRCode value={JSON.stringify("orderInfo")} />
     </div>
   )
 }

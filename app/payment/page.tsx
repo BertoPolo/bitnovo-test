@@ -1,11 +1,21 @@
 "use client"
 import React, { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 
 const PaymentForm = () => {
   const [coin, setCoin] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
+
+  const router = useRouter()
+  const navigate = useNavigate()
+
+  const handleSubmit = () => {
+    router.push(`/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=${encodeURIComponent(concept)}`)
+    navigate(`/payment/${router}`)
+  }
 
   return (
     <div className="border-2 p-5 text-center">
@@ -46,7 +56,7 @@ const PaymentForm = () => {
       />
       <br />
       <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept}>
-        <Link href="/payment/resume">Continuar</Link>
+        Continuar
       </button>
     </div>
   )
