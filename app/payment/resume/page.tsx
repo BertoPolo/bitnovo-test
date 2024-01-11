@@ -1,7 +1,8 @@
+"use client"
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
 
-// Componente que muestra el QR
+// Componente que muestra el QR, pasar a otro componente a parte
 const PaymentQR = ({ orderInfo }: any) => {
   // remove any type!!
   return (

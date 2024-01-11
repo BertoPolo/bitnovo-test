@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from "react"
+import Link from "next/link"
 
 const PaymentForm = () => {
   const [coin, setCoin] = useState("")
@@ -45,7 +46,7 @@ const PaymentForm = () => {
       />
       <br />
       <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept}>
-        Continuar
+        <Link href="/payment/resume">Continuar</Link>
       </button>
     </div>
   )
