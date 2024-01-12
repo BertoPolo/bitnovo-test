@@ -1,8 +1,7 @@
 "use client"
 import React, { useState } from "react"
-import Link from "next/link"
+// import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useNavigate } from "react-router-dom"
 
 const PaymentForm = () => {
   const [coin, setCoin] = useState("")
@@ -10,11 +9,9 @@ const PaymentForm = () => {
   const [concept, setConcept] = useState("")
 
   const router = useRouter()
-  const navigate = useNavigate()
 
   const handleSubmit = () => {
     router.push(`/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=${encodeURIComponent(concept)}`)
-    navigate(`/payment/${router}`)
   }
 
   return (
@@ -35,7 +32,7 @@ const PaymentForm = () => {
         <label htmlFor="">Seleccionar moneda</label>
       </div>
       <select className="select select-bordered w-full max-w-xs" onChange={(e) => setCoin(e.target.value)} defaultValue="">
-        <option disabled>Buscar</option>
+        {/* <option disabled>Buscar</option> */}
         <option value="bitcoin">Bitcoin</option>
         <option value="ethereum">Ethereum</option>
         <option value="litecoin">Litecoin</option>
@@ -55,7 +52,7 @@ const PaymentForm = () => {
         onChange={(e) => setConcept(e.target.value)}
       />
       <br />
-      <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept}>
+      <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
         Continuar
       </button>
     </div>

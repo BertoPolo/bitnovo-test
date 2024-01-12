@@ -1,23 +1,29 @@
 "use client"
+
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
-import { useRouter } from "next/router"
+import { useRouter, useSearchParams } from "next/navigation"
 
-// Componente que muestra el QR, pasar a otro componente a parte?
-const PaymentQR = () => {
-  const router = useRouter()
-  const { price, coin, concept } = router.query
-
-  return (
-    <div>
-      <h2>Detalles del Pago</h2>
-      <QRCode value={JSON.stringify("orderInfo")} />
-    </div>
-  )
-}
+const PaymentQR = ({ orderInfo }: any) => (
+  <div>
+    <h2>Detalles del Pago</h2>
+    <QRCode value={JSON.stringify(orderInfo)} />
+  </div>
+)
 
 const Resume = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const identifier = process.env.REACT_APP_IDENTIFIER
+  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "" })
+
+  useEffect(() => {
+    const price = searchParams.get("price") || ""
+    const coin = searchParams.get("coin") || ""
+    const concept = searchParams.get("concept") || ""
+    setOrderInfo({ price, coin, concept })
+  }, [searchParams])
+
   useEffect(() => {
     console.log(identifier)
     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${identifier}`)
@@ -35,8 +41,21 @@ const Resume = () => {
   }, [identifier])
 
   return (
-    <div>
-      <div>Resume</div>
+    <div className="flex">
+      <div className="flex-1 p-4">
+        <p>
+          <strong>Importe:</strong> {orderInfo.price}
+        </p>
+        <p>
+          <strong>Moneda:</strong> {orderInfo.coin}
+        </p>
+        <p>
+          <strong>Concepto:</strong> {orderInfo.concept}
+        </p>
+      </div>
+      <div className="flex-1 p-4">
+        <PaymentQR orderInfo={orderInfo} />
+      </div>
     </div>
   )
 }
