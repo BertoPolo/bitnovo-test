@@ -8,10 +8,35 @@ const PaymentForm = () => {
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
 
+  const [error, setError] = useState("")
+
   const router = useRouter()
 
-  const handleSubmit = () => {
-    router.push(`/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=${encodeURIComponent(concept)}`)
+  const handleSubmit = async () => {
+    const formData = new FormData()
+    formData.append("expected_output_amount", price.toString())
+    formData.append("merchant_urlok", "https://payments.com/ok")
+    formData.append("merchant_urlko", "https://payments.com/ko")
+    try {
+      const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
+        method: "POST",
+        headers: {
+          "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+        },
+        body: formData,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        router.push(`/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=${encodeURIComponent(concept)}`)
+        console.log(data)
+      } else {
+        setError("Please enter a valid amount and currency code to continue")
+      }
+    } catch (error) {
+      console.error("Error al enviar el pedido:", error)
+      setError("An error occurred while processing your payment")
+    }
   }
 
   return (

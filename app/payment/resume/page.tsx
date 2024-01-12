@@ -25,18 +25,20 @@ const Resume = () => {
   }, [searchParams])
 
   useEffect(() => {
-    console.log(identifier)
     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${identifier}`)
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      if (data.status === "EX" || data.status === "OC") {
-        // redirect to KO
-      } else if (data.status === "CO" || data.status === "AC") {
-        // redirect to OK
+    if (identifier) {
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        if (data.status === "EX" || data.status === "OC") {
+          // redirect to KO
+        } else if (data.status === "CO" || data.status === "AC") {
+          // redirect to OK
+        }
       }
+    } else {
+      console.error("Identifier is undefined.")
     }
-
     return () => socket.close()
   }, [identifier])
 
