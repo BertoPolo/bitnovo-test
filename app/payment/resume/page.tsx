@@ -14,7 +14,7 @@ const PaymentQR = ({ orderInfo }: any) => (
 const Resume = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const identifier = process.env.REACT_APP_IDENTIFIER
+  const identifier = process.env.NEXT_PUBLIC_IDENTIFIER
   const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "" })
 
   useEffect(() => {
@@ -41,20 +41,22 @@ const Resume = () => {
   }, [identifier])
 
   return (
-    <div className="flex">
-      <div className="flex-1 p-4">
-        <p>
-          <strong>Importe:</strong> {orderInfo.price}
-        </p>
-        <p>
-          <strong>Moneda:</strong> {orderInfo.coin}
-        </p>
-        <p>
-          <strong>Concepto:</strong> {orderInfo.concept}
-        </p>
-      </div>
-      <div className="flex-1 p-4">
-        <PaymentQR orderInfo={orderInfo} />
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="flex flex-col md:flex-row gap-4 p-4 bg-white shadow-lg rounded-lg">
+        <div className="flex-1">
+          <p>
+            <strong>Importe:</strong> {orderInfo.price}
+          </p>
+          <p>
+            <strong>Moneda:</strong> {orderInfo.coin}
+          </p>
+          <p>
+            <strong>Concepto:</strong> {orderInfo.concept}
+          </p>
+        </div>
+        <div className="flex-1">
+          <PaymentQR orderInfo={orderInfo} />
+        </div>
       </div>
     </div>
   )
