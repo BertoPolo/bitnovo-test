@@ -12,35 +12,53 @@ const PaymentQR = ({ orderInfo }: any) => (
 )
 
 const Resume = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
-  const identifier = process.env.NEXT_PUBLIC_IDENTIFIER
-  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "" })
+  const router = useRouter()
+  // const identifier = process.env.NEXT_PUBLIC_IDENTIFIER
+  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "", id: "" })
 
   useEffect(() => {
     const price = searchParams.get("price") || ""
     const coin = searchParams.get("coin") || ""
     const concept = searchParams.get("concept") || ""
-    setOrderInfo({ price, coin, concept })
+    const id = searchParams.get("id") || ""
+    setOrderInfo({ price, coin, concept, id })
   }, [searchParams])
 
   useEffect(() => {
-    const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${identifier}`)
+    if (orderInfo.id) {
+      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
 
-    if (identifier) {
+      socket.onopen = () => {
+        console.log("WebSocket connection established")
+      }
+
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        if (data.status === "EX" || data.status === "OC") {
-          // redirect to KO
-        } else if (data.status === "CO" || data.status === "AC") {
-          // redirect to OK
+        console.log("Received data:", data)
+
+        if (data.status === "CO" || data.status === "AC") {
+          router.push("/payment-success")
+        } else if (data.status === "EX" || data.status === "OC") {
+          router.push("/payment-failed")
         }
+      }
+
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error)
+      }
+
+      socket.onclose = () => {
+        console.log("WebSocket connection closed")
+      }
+
+      return () => {
+        socket.close()
       }
     } else {
       console.error("Identifier is undefined.")
     }
-    return () => socket.close()
-  }, [identifier])
+  }, [orderInfo.id])
 
   return (
     <div className="flex justify-center items-center min-h-screen">
