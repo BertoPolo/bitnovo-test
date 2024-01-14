@@ -7,6 +7,7 @@ const PaymentForm = () => {
   const [coin, setCoin] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
+  const [currencies, setCurrencies] = useState([{}])
 
   const [error, setError] = useState("")
 
@@ -39,6 +40,19 @@ const PaymentForm = () => {
     } catch (error) {
       console.error("Error al enviar el pedido:", error)
       setError("An error occurred while processing your payment")
+    }
+  }
+
+  const getCurriencies = async () => {
+    try {
+      const response = await fetch("https://payments.pre-bnvo.com/api/v1/currencies")
+
+      if (response.ok) {
+        const data = await response.json()
+        setCurrencies(data)
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
