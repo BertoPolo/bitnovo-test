@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 
 const PaymentForm = () => {
   const [coin, setCoin] = useState("")
-  const [okUrl, setOkUrl] = useState("")
+  const [paymentUri, setPaymentUri] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState([{}])
@@ -38,7 +38,7 @@ const PaymentForm = () => {
         console.log(data)
         router.push(
           `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
-          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&urlok=${encodeURIComponent(data.web_url)}`
+          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(data.payment_uri)}`
         )
       } else {
         setError("Please enter a valid amount and currency code to continue")
