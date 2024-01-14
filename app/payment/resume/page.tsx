@@ -28,65 +28,46 @@ const Resume = () => {
 
   useEffect(() => {
     if (orderInfo.id) {
-      const socket = io(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
+      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
 
-      socket.on("connect", () => {
-        console.log("Socket.IO connection established")
-      })
+      socket.onopen = () => {
+        console.log("WebSocket connection established")
+      }
 
-      socket.on("payment_status", (data) => {
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
         console.log("Received data:", data)
         handlePaymentStatus(data.status)
-      })
+      }
 
-      socket.on("disconnect", () => {
-        console.log("Socket.IO connection closed")
-      })
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error)
+      }
+
+      socket.onclose = () => {
+        console.log("WebSocket connection closed")
+      }
 
       return () => {
-        socket.disconnect()
+        socket.close()
       }
     }
   }, [orderInfo.id, router])
 
   const handlePaymentStatus = (status: string) => {
-    if (status === "CO") router.push("/payment-success")
-    else router.push(`/payment-failed?status=${status}`)
+    switch (status) {
+      case "CO":
+        router.push("/payment-success")
+        break
+      case "NR":
+      case "PE":
+      case "AC":
+        router.push(`/payment-failed?status=${status}`)
+        break
+      default:
+        console.log(`Unhandled status: ${status}`)
+    }
   }
-
-  // useEffect(() => {
-  //   if (orderInfo.id !== undefined) {
-  //     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
-
-  //     console.log("WebSocket trying to connect")
-  //     socket.onopen = () => {
-  //       console.log("WebSocket connection established")
-  //     }
-
-  //     socket.onmessage = (event) => {
-  //       const data = JSON.parse(event.data)
-  //       console.log("Received data:", data)
-
-  //       if (data.status === "CO" || data.status === "AC") {
-  //         router.push("/payment-success")
-  //       } else if (data.status === "EX" || data.status === "OC") {
-  //         router.push("/payment-failed")
-  //       } else console.log("data status:", data.status)
-  //     }
-
-  //     socket.onerror = (error) => {
-  //       console.error("WebSocket error:", error)
-  //     }
-
-  //     socket.onclose = () => {
-  //       console.log("WebSocket connection closed")
-  //     }
-
-  //     return () => {
-  //       socket.close()
-  //     }
-  //   }
-  // }, [orderInfo.id])
 
   return (
     <div className="flex justify-center items-center min-h-screen">
