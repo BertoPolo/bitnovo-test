@@ -1,10 +1,11 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 // import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 const PaymentForm = () => {
   const [coin, setCoin] = useState("")
+  const [okUrl, setOkUrl] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState([{}])
@@ -18,6 +19,11 @@ const PaymentForm = () => {
     formData.append("expected_output_amount", price.toString())
     formData.append("merchant_urlok", "https://payments.com/ok")
     formData.append("merchant_urlko", "https://payments.com/ko")
+    formData.append("input_currency", "ETH_TEST3") //coin
+    // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
+    //   // check coins exact name
+    //   formData.append("", "")
+    // }
     try {
       const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
         method: "POST",
@@ -29,10 +35,10 @@ const PaymentForm = () => {
 
       if (response.ok) {
         const data = await response.json()
-        console.log(data.identifier)
+        console.log(data)
         router.push(
           `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
-          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}`
+          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&urlok=${encodeURIComponent(data.web_url)}`
         )
       } else {
         setError("Please enter a valid amount and currency code to continue")
@@ -50,15 +56,19 @@ const PaymentForm = () => {
       if (response.ok) {
         const data = await response.json()
         setCurrencies(data)
+        console.log(data)
       }
     } catch (error) {
       console.error(error)
     }
   }
+  // useEffect(() => {
+  //   getCurriencies() // just do it once
+  // }, [])
 
   return (
     <div className="border-2 p-5 text-center">
-      <h3 className="text-xl ">Crear pago</h3>
+      <h3 className="text-xl mb-6 ">Crear pago</h3>
       <div className="text-start">
         <label htmlFor="">Importe a pagar</label>
       </div>
@@ -75,6 +85,7 @@ const PaymentForm = () => {
       </div>
       <select className="select select-bordered w-full max-w-xs" onChange={(e) => setCoin(e.target.value)} defaultValue="">
         {/* <option disabled>Buscar</option> */}
+
         <option value="bitcoin">Bitcoin</option>
         <option value="ethereum">Ethereum</option>
         <option value="litecoin">Litecoin</option>

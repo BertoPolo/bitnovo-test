@@ -8,7 +8,7 @@ import { io } from "socket.io-client"
 const PaymentQR = ({ orderInfo }: any) => (
   <div>
     <h2>Detalles del Pago</h2>
-    <QRCode value={JSON.stringify(orderInfo)} />
+    <QRCode value={JSON.stringify(orderInfo.urlok)} />
   </div>
 )
 
@@ -16,14 +16,15 @@ const Resume = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   // const identifier = process.env.NEXT_PUBLIC_IDENTIFIER
-  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "", id: "" })
+  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "", id: "", urlok: "" })
 
   useEffect(() => {
     const price = searchParams.get("price") || ""
     const coin = searchParams.get("coin") || ""
     const concept = searchParams.get("concept") || ""
     const id = searchParams.get("id") || ""
-    setOrderInfo({ price, coin, concept, id })
+    const urlok = searchParams.get("urlok") || ""
+    setOrderInfo({ price, coin, concept, id, urlok })
   }, [searchParams])
 
   // useEffect(() => {
