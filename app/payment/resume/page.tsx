@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { io } from "socket.io-client"
 
 const PaymentQR = ({ orderInfo }: any) => (
   <div>
@@ -25,10 +26,25 @@ const Resume = () => {
     setOrderInfo({ price, coin, concept, id })
   }, [searchParams])
 
-  useEffect(() => {
-    if (orderInfo.id) {
-      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
+  // useEffect(() => {
+  //   const ADDRESS = "wss://payments.pre-bnvo.com/ws/0a0c454e-4b63-4da5-913e-7c251179a16c" // <-- address of the BACKEND PROCESS
+  //   const socket = io("wss://payments.pre-bnvo.com/ws/0a0c454e-4b63-4da5-913e-7c251179a16c", { transports: ["websocket"] })
+  //   if (orderInfo.id !== undefined) {
+  //     // const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
 
+  //     console.log("WebSocket trying to connect")
+  //     socket.on("connection", () => {
+  //       console.log("WebSocket connection established")
+  //     })
+  //   }
+  // }, [orderInfo.id])
+
+  useEffect(() => {
+    if (orderInfo.id !== undefined) {
+      // const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
+      const socket = new WebSocket("wss://payments.pre-bnvo.com/ws/044e4992-756b-4bf7-bd03-fa32f7b3d584")
+
+      console.log("WebSocket trying to connect")
       socket.onopen = () => {
         console.log("WebSocket connection established")
       }
@@ -41,7 +57,7 @@ const Resume = () => {
           router.push("/payment-success")
         } else if (data.status === "EX" || data.status === "OC") {
           router.push("/payment-failed")
-        }
+        } else console.log("data status:", data.status)
       }
 
       socket.onerror = (error) => {
@@ -55,8 +71,6 @@ const Resume = () => {
       return () => {
         socket.close()
       }
-    } else {
-      console.error("Identifier is undefined.")
     }
   }, [orderInfo.id])
 
