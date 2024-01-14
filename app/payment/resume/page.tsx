@@ -42,10 +42,16 @@ const Resume = () => {
 
       socket.onerror = (error) => {
         console.error("WebSocket error:", error)
+        router.push(`/payment/failed`)
+
+        router.push("/payment-failed")
       }
 
-      socket.onclose = () => {
-        console.log("WebSocket connection closed")
+      socket.onclose = (event) => {
+        console.log("WebSocket connection closed", event.code)
+        if (event.code !== 1000) {
+          router.push(`/payment/failed`)
+        }
       }
 
       return () => {
@@ -57,12 +63,12 @@ const Resume = () => {
   const handlePaymentStatus = (status: string) => {
     switch (status) {
       case "CO":
-        router.push("/payment-success")
+        router.push("/payment/success")
         break
       case "NR":
       case "PE":
       case "AC":
-        router.push(`/payment-failed?status=${status}`)
+        router.push(`/payment/failed-${status}`)
         break
       default:
         console.log(`Unhandled status: ${status}`)
