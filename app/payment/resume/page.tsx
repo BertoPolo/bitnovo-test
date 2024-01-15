@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { OrderInfo } from "@/types"
 
-const PaymentQR = ({ orderInfo }: any) => (
+const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => (
   <div>
     <h2>Detalles del Pago</h2>
     <QRCode value={orderInfo.paymentUri} />
@@ -14,7 +15,7 @@ const PaymentQR = ({ orderInfo }: any) => (
 const Resume = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [orderInfo, setOrderInfo] = useState({ price: "", coin: "", concept: "", id: "", paymentUri: "" })
+  const [orderInfo, setOrderInfo] = useState<OrderInfo>({ price: "", coin: "", concept: "", id: "", paymentUri: "" })
 
   useEffect(() => {
     const price = searchParams.get("price") || ""

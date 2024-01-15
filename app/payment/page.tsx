@@ -2,55 +2,57 @@
 import React, { useEffect, useState } from "react"
 // import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { Currency } from "@/types"
 
 const PaymentForm = () => {
+  const router = useRouter()
+
   const [coin, setCoin] = useState("")
   const [paymentUri, setPaymentUri] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState<Currency[]>([])
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState(coin || "")
   const [showDropdown, setShowDropdown] = useState(false)
-
   const [error, setError] = useState("")
-  const router = useRouter()
-
-  type Currency = {
-    symbol: string
-  }
 
   const handleSubmit = async () => {
-    const formData = new FormData()
-    formData.append("expected_output_amount", price.toString())
-    formData.append("merchant_urlok", "https://payments.com/ok")
-    formData.append("merchant_urlko", "https://payments.com/ko")
-    formData.append("input_currency", "ETH_TEST3") //coin
-    // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
-    //   // check coins exact name
-    //   formData.append("", "")
-    // }
-    try {
-      const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
-        method: "POST",
-        headers: {
-          "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
-        },
-        body: formData,
-      })
+    if (isValidCoin()) {
+      const formData = new FormData()
+      formData.append("expected_output_amount", price.toString())
+      formData.append("merchant_urlok", "https://payments.com/ok")
+      formData.append("merchant_urlko", "https://payments.com/ko")
+      formData.append("input_currency", "ETH_TEST3") //coin
+      // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
+      //   // check coins exact name
+      //   formData.append("", "")
+      // }
+      try {
+        const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
+          method: "POST",
+          headers: {
+            "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+          },
+          body: formData,
+        })
 
-      if (response.ok) {
-        const data = await response.json()
-        console.log(data)
-        router.push(
-          `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
+        if (response.ok) {
+          const data = await response.json()
+          console.log(data)
+          router.push(
+            `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
           ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(data.payment_uri)}`
-        )
-      } else {
-        setError("Please enter a valid amount and currency code to continue")
+          )
+        } else {
+          setError("Please enter a valid amount and currency code to continue")
+        }
+      } catch (error) {
+        console.error("Error al enviar el pedido:", error)
+        setError("An error occurred while processing your payment")
       }
-    } catch (error) {
-      console.error("Error al enviar el pedido:", error)
-      setError("An error occurred while processing your payment")
+    } else {
+      setError("Choose one of the available coins")
+      console.log(error)
     }
   }
 
@@ -71,16 +73,29 @@ const PaymentForm = () => {
       console.error(error)
     }
   }
-  // useEffect(() => {
-  //   getCurriencies()
-  // }, [])
-
-  const currencyOptions = currencies.map((currency) => ({
-    value: currency.symbol,
-    label: currency.symbol,
-  }))
+  useEffect(() => {
+    getCurriencies()
+  }, [])
 
   const filteredCurrencies = currencies.filter((currency) => currency.symbol.toLowerCase().includes(search.toLowerCase()))
+
+  const isValidCoin = () => {
+    const selectedCurrency = currencies.find((currency) => currency.symbol === coin)
+    return !!selectedCurrency
+  }
+
+  const handleCurrencySelect = (symbol: string) => {
+    setCoin(symbol)
+    setSearch(symbol)
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+    setSearch(value)
+    if (value !== coin) {
+      setCoin("")
+    }
+  }
 
   return (
     <div className="border-2 p-5 text-center">
@@ -96,24 +111,6 @@ const PaymentForm = () => {
         onChange={(e) => setPrice(parseFloat(e.target.value))}
       />
       <br /> {/* take it out! */}
-      {/* <div className="text-start">
-        <label htmlFor="currency-search">Seleccionar moneda </label>
-        <input
-          id="currency-search"
-          type="text"
-          className="input input-bordered w-full max-w-xs"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar..."
-        />
-      </div>
-      <select className="select select-bordered w-full max-w-xs" value={coin} onChange={(e) => setCoin(e.target.value)}>
-        {filteredCurrencies.map((currency, index) => (
-          <option key={index} value={currency.symbol}>
-            {currency.symbol}
-          </option>
-        ))}
-      </select> */}
       <div className="text-start">
         <label htmlFor="currency-search">Seleccionar moneda</label>
         <input
@@ -121,7 +118,7 @@ const PaymentForm = () => {
           type="text"
           className="input input-bordered w-full max-w-xs"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
           onFocus={() => setShowDropdown(true)}
           onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           placeholder="Buscar..."
@@ -129,7 +126,7 @@ const PaymentForm = () => {
         {showDropdown && (
           <div className="absolute bg-white border mt-1 rounded">
             {filteredCurrencies.map((currency, index) => (
-              <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => setCoin(currency.symbol)}>
+              <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleCurrencySelect(currency.symbol)}>
                 {currency.symbol}
               </div>
             ))}
