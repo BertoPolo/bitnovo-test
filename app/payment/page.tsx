@@ -8,11 +8,16 @@ const PaymentForm = () => {
   const [paymentUri, setPaymentUri] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
-  const [currencies, setCurrencies] = useState([{}])
+  const [currencies, setCurrencies] = useState<Currency[]>([])
+  const [search, setSearch] = useState("")
+  const [showDropdown, setShowDropdown] = useState(false)
 
   const [error, setError] = useState("")
-
   const router = useRouter()
+
+  type Currency = {
+    symbol: string
+  }
 
   const handleSubmit = async () => {
     const formData = new FormData()
@@ -66,9 +71,16 @@ const PaymentForm = () => {
       console.error(error)
     }
   }
-  useEffect(() => {
-    getCurriencies()
-  }, [])
+  // useEffect(() => {
+  //   getCurriencies()
+  // }, [])
+
+  const currencyOptions = currencies.map((currency) => ({
+    value: currency.symbol,
+    label: currency.symbol,
+  }))
+
+  const filteredCurrencies = currencies.filter((currency) => currency.symbol.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <div className="border-2 p-5 text-center">
@@ -84,19 +96,46 @@ const PaymentForm = () => {
         onChange={(e) => setPrice(parseFloat(e.target.value))}
       />
       <br /> {/* take it out! */}
-      <div className="text-start">
-        <label htmlFor="">Seleccionar moneda</label>
+      {/* <div className="text-start">
+        <label htmlFor="currency-search">Seleccionar moneda </label>
+        <input
+          id="currency-search"
+          type="text"
+          className="input input-bordered w-full max-w-xs"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar..."
+        />
       </div>
-      <select className="select select-bordered w-full max-w-xs" onChange={(e) => setCoin(e.target.value)} defaultValue="">
-        {/* <option disabled>Buscar</option> */}
-
-        <option value="bitcoin">Bitcoin</option>
-        <option value="ethereum">Ethereum</option>
-        <option value="litecoin">Litecoin</option>
-        <option value="polygon">Polygon</option>
-        <option value="ripple">Ripple</option>
-        <option value="usdc">USD Coin</option>
-      </select>
+      <select className="select select-bordered w-full max-w-xs" value={coin} onChange={(e) => setCoin(e.target.value)}>
+        {filteredCurrencies.map((currency, index) => (
+          <option key={index} value={currency.symbol}>
+            {currency.symbol}
+          </option>
+        ))}
+      </select> */}
+      <div className="text-start">
+        <label htmlFor="currency-search">Seleccionar moneda</label>
+        <input
+          id="currency-search"
+          type="text"
+          className="input input-bordered w-full max-w-xs"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setShowDropdown(true)}
+          onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+          placeholder="Buscar..."
+        />
+        {showDropdown && (
+          <div className="absolute bg-white border mt-1 rounded">
+            {filteredCurrencies.map((currency, index) => (
+              <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => setCoin(currency.symbol)}>
+                {currency.symbol}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <br />
       <div className="text-start">
         <label htmlFor="">Concepto</label>
