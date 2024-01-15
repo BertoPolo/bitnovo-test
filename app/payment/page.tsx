@@ -51,7 +51,11 @@ const PaymentForm = () => {
 
   const getCurriencies = async () => {
     try {
-      const response = await fetch("https://payments.pre-bnvo.com/api/v1/currencies")
+      const response = await fetch("https://payments.pre-bnvo.com/api/v1/currencies", {
+        headers: {
+          "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+        },
+      })
 
       if (response.ok) {
         const data = await response.json()
@@ -62,9 +66,9 @@ const PaymentForm = () => {
       console.error(error)
     }
   }
-  // useEffect(() => {
-  //   getCurriencies() // just do it once
-  // }, [])
+  useEffect(() => {
+    getCurriencies()
+  }, [])
 
   return (
     <div className="border-2 p-5 text-center">

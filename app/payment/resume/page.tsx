@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { io } from "socket.io-client"
 
 const PaymentQR = ({ orderInfo }: any) => (
   <div>
