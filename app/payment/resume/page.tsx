@@ -7,8 +7,19 @@ import { OrderInfo } from "@/types"
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => (
   <div>
-    <h2>Detalles del Pago</h2>
+    <h2>Realiza el pago</h2>
+    <p>
+      <span>icon</span> timer
+    </p>
+    <br />
+    <button className="btn">Smart QR</button>
+    <button className="btn disabled">Web3</button>
     <QRCode value={orderInfo.paymentUri} />
+    <br />
+    <p>
+      Enviar <b>{}</b>
+      {/* orderInfo.expected_input_amount ??*/}
+    </p>
   </div>
 )
 
@@ -79,12 +90,22 @@ const Resume = () => {
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col md:flex-row gap-4 p-4 bg-white shadow-lg rounded-lg">
         <div className="flex-1">
+          <h2>Resumen del pedido</h2>
           <p>
-            <strong>Importe:</strong> {orderInfo.price}
+            <strong>Importe:</strong> {orderInfo.price} EUR
+          </p>
+          <hr />
+          <p>
+            <strong>Moneda seleccionada:</strong> {orderInfo.coin}
+          </p>
+          <hr />
+          <p>
+            <strong>Comercio:</strong> Comercio de pruebas Samega
           </p>
           <p>
-            <strong>Moneda:</strong> {orderInfo.coin}
+            <strong>Fecha:</strong> {Date.now()}
           </p>
+          <hr />
           <p>
             <strong>Concepto:</strong> {orderInfo.concept}
           </p>
