@@ -5,23 +5,42 @@ import QRCode from "qrcode.react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { OrderInfo } from "@/types"
 
-const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => (
-  <div>
-    <h2>Realiza el pago</h2>
-    <p>
-      <span>icon</span> timer
-    </p>
-    <br />
-    <button className="btn">Smart QR</button>
-    <button className="btn disabled">Web3</button>
-    <QRCode value={orderInfo.paymentUri} />
-    <br />
-    <p>
-      Enviar <b>{}</b>
-      {/* orderInfo.expected_input_amount ??*/}
-    </p>
-  </div>
-)
+const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
+  const router = useRouter()
+  const [timeLeft, setTimeLeft] = useState(310)
+  useEffect(() => {
+    if (timeLeft === 0) router.push(`/payment/failed-timeout`)
+
+    const intervalId = setInterval(() => {
+      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
+    }, 1000)
+    return () => clearInterval(intervalId)
+  }, [timeLeft])
+
+  const formatTimeLeft = () => {
+    const minutes = Math.floor(timeLeft / 60)
+    const seconds = timeLeft % 60
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+  }
+
+  return (
+    <div>
+      <h2>Realiza el pago</h2>
+      <p>
+        <span>icon</span> {formatTimeLeft()}
+      </p>
+      <br />
+      <button className="btn">Smart QR</button>
+      <button className="btn disabled">Web3</button>
+      <QRCode value={orderInfo.paymentUri} />
+      <br />
+      <p>
+        Enviar <b>{}</b>
+        {/* orderInfo.expected_input_amount ??*/}
+      </p>
+    </div>
+  )
+}
 
 const Resume = () => {
   const searchParams = useSearchParams()
@@ -85,6 +104,7 @@ const Resume = () => {
         console.log(`Unhandled status: ${status}`)
     }
   }
+
   function getCurrentDateTime() {
     const now = new Date()
     const day = String(now.getDate()).padStart(2, "0")
