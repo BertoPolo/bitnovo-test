@@ -7,9 +7,9 @@ import { OrderInfo } from "@/types"
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
-  const [timeLeft, setTimeLeft] = useState(310)
+  const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
   useEffect(() => {
-    if (timeLeft === 0) router.push(`/payment/failed-timeout`)
+    if (timeLeft === 0) router.push(`/payment/failed/timeout`)
 
     const intervalId = setInterval(() => {
       setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
@@ -26,12 +26,32 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   return (
     <div>
       <h2>Realiza el pago</h2>
-      <p>
-        <span>icon</span> {formatTimeLeft()}
-      </p>
+      <div>
+        <span>
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            height="1.2em"
+            width="1.2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="Clock_2">
+              <g>
+                <path d="M12,21.933A9.933,9.933,0,1,1,21.933,12,9.944,9.944,0,0,1,12,21.933ZM12,3.067A8.933,8.933,0,1,0,20.933,12,8.943,8.943,0,0,0,12,3.067Z"></path>
+                <path d="M18,12.5H12a.429.429,0,0,1-.34-.14c-.01,0-.01-.01-.02-.02A.429.429,0,0,1,11.5,12V6a.5.5,0,0,1,1,0v5.5H18A.5.5,0,0,1,18,12.5Z"></path>
+              </g>
+            </g>
+          </svg>
+        </span>
+        <span>{formatTimeLeft()}</span>
+      </div>
       <br />
-      <button className="btn">Smart QR</button>
-      <button className="btn disabled">Web3</button>
+      <button className="btn btn-primary">Smart QR</button>
+      <button className="btn btn-primary" disabled>
+        Web3
+      </button>
       <QRCode value={orderInfo.paymentUri} />
       <br />
       <p>
