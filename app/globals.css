@@ -30,3 +30,8 @@ h3 {
   color: green;
   border-radius: 50%;
 }
+.cross {
+  background-color: rgb(209, 101, 101);
+  color: red;
+  border-radius: 50%;
+}

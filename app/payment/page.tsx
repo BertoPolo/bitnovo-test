@@ -102,7 +102,7 @@ const PaymentForm = () => {
       <div className="border-2 p-5">
         <h3 className="text-xl mb-6 ">Crear pago</h3>
         <div>
-          <label>Importe a pagar</label>
+          <p>Importe a pagar</p>
         </div>
         <input
           type="number"
@@ -111,10 +111,10 @@ const PaymentForm = () => {
           value={price}
           onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
-        <br /> {/* take it out! */}
+        {/* take it out! */}
         <div>
-          <label>Seleccionar moneda</label>
-          <br />
+          <p>Seleccionar moneda</p>
+
           <input
             id="currency-search"
             type="text"
@@ -135,9 +135,9 @@ const PaymentForm = () => {
             </div>
           )}
         </div>
-        <br />
+
         <div>
-          <label>Concepto</label>
+          <p>Concepto</p>
         </div>
         <input
           type="text"
@@ -146,7 +146,7 @@ const PaymentForm = () => {
           value={concept}
           onChange={(e) => setConcept(e.target.value)}
         />
-        <br />
+
         <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
           Continuar
         </button>
