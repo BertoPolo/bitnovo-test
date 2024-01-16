@@ -98,25 +98,25 @@ const PaymentForm = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center min-h-screen ">
       <div className="border-2 p-5">
-        <h3 className="text-xl mb-6 ">Crear pago</h3>
-        <div>
-          <p>Importe a pagar</p>
-        </div>
-        <input
-          type="number"
-          placeholder="56.06"
-          className="input input-bordered w-full max-w-xs"
-          value={price}
-          onChange={(e) => setPrice(parseFloat(e.target.value))}
-        />
-        {/* take it out! */}
-        <div>
-          <p>Seleccionar moneda</p>
-
+        <h3 className="text-xl mb-6">Crear pago</h3>
+        <div className="mb-4">
+          <label htmlFor="amount">Importe a pagar</label>
           <input
-            id="currency-search"
+            type="number"
+            id="amount"
+            placeholder="56.06"
+            className="input input-bordered w-full max-w-xs"
+            value={price}
+            onChange={(e) => setPrice(parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="currency">Seleccionar moneda</label>
+          <input
+            id="currency"
             type="text"
             className="input input-bordered w-full max-w-xs"
             value={search}
@@ -136,18 +136,20 @@ const PaymentForm = () => {
           )}
         </div>
 
-        <div>
-          <p>Concepto</p>
+        <div className="mb-4">
+          <label htmlFor="concept">Concepto</label>
+          <br />
+          <input
+            type="text"
+            id="concept"
+            placeholder="Añade descripcion del pago"
+            className="input input-bordered w-full max-w-xs"
+            value={concept}
+            onChange={(e) => setConcept(e.target.value)}
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Añade descripcion del pago"
-          className="input input-bordered w-full max-w-xs"
-          value={concept}
-          onChange={(e) => setConcept(e.target.value)}
-        />
 
-        <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
+        <button className="btn btn-primary btn-wide mt-4" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
           Continuar
         </button>
       </div>
