@@ -98,56 +98,59 @@ const PaymentForm = () => {
   }
 
   return (
-    <div className="border-2 p-5 text-center">
-      <h3 className="text-xl mb-6 ">Crear pago</h3>
-      <div className="text-start">
-        <label htmlFor="">Importe a pagar</label>
-      </div>
-      <input
-        type="number"
-        placeholder="56.06"
-        className="input input-bordered w-full max-w-xs"
-        value={price}
-        onChange={(e) => setPrice(parseFloat(e.target.value))}
-      />
-      <br /> {/* take it out! */}
-      <div className="text-start">
-        <label htmlFor="currency-search">Seleccionar moneda</label>
+    <div className="flex flex-col items-center justify-center">
+      <div className="border-2 p-5">
+        <h3 className="text-xl mb-6 ">Crear pago</h3>
+        <div>
+          <label>Importe a pagar</label>
+        </div>
         <input
-          id="currency-search"
-          type="text"
+          type="number"
+          placeholder="56.06"
           className="input input-bordered w-full max-w-xs"
-          value={search}
-          onChange={handleSearchChange}
-          onFocus={() => setShowDropdown(true)}
-          onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
-          placeholder="Buscar..."
+          value={price}
+          onChange={(e) => setPrice(parseFloat(e.target.value))}
         />
-        {showDropdown && (
-          <div className="absolute bg-white border mt-1 rounded">
-            {filteredCurrencies.map((currency, index) => (
-              <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleCurrencySelect(currency.symbol)}>
-                {currency.symbol}
-              </div>
-            ))}
-          </div>
-        )}
+        <br /> {/* take it out! */}
+        <div>
+          <label>Seleccionar moneda</label>
+          <br />
+          <input
+            id="currency-search"
+            type="text"
+            className="input input-bordered w-full max-w-xs"
+            value={search}
+            onChange={handleSearchChange}
+            onFocus={() => setShowDropdown(true)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+            placeholder="Buscar"
+          />
+          {showDropdown && (
+            <div className="absolute bg-white border mt-1 rounded">
+              {filteredCurrencies.map((currency, index) => (
+                <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleCurrencySelect(currency.symbol)}>
+                  {currency.symbol}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <br />
+        <div>
+          <label>Concepto</label>
+        </div>
+        <input
+          type="text"
+          placeholder="Añade descripcion del pago"
+          className="input input-bordered w-full max-w-xs"
+          value={concept}
+          onChange={(e) => setConcept(e.target.value)}
+        />
+        <br />
+        <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
+          Continuar
+        </button>
       </div>
-      <br />
-      <div className="text-start">
-        <label htmlFor="">Concepto</label>
-      </div>
-      <input
-        type="text"
-        placeholder="Añade descripcion del pago"
-        className="input input-bordered w-full max-w-xs"
-        value={concept}
-        onChange={(e) => setConcept(e.target.value)}
-      />
-      <br />
-      <button className="btn btn-primary btn-wide" disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
-        Continuar
-      </button>
     </div>
   )
 }

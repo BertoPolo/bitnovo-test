@@ -37,39 +37,39 @@ const Resume = () => {
     setOrderInfo({ price, coin, concept, id, paymentUri })
   }, [searchParams])
 
-  useEffect(() => {
-    if (orderInfo.id) {
-      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
+  // useEffect(() => {
+  //   if (orderInfo.id) {
+  //     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
 
-      socket.onopen = () => {
-        console.log("WebSocket connection established")
-      }
+  //     socket.onopen = () => {
+  //       console.log("WebSocket connection established")
+  //     }
 
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data)
-        console.log("Received data:", data)
-        handlePaymentStatus(data.status)
-      }
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data)
+  //       console.log("Received data:", data)
+  //       handlePaymentStatus(data.status)
+  //     }
 
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error)
-        router.push(`/payment/failed`)
+  //     socket.onerror = (error) => {
+  //       console.error("WebSocket error:", error)
+  //       router.push(`/payment/failed`)
 
-        router.push("/payment-failed")
-      }
+  //       router.push("/payment-failed")
+  //     }
 
-      socket.onclose = (event) => {
-        console.log("WebSocket connection closed", event.code)
-        if (event.code !== 1000) {
-          router.push(`/payment/failed`)
-        }
-      }
+  //     socket.onclose = (event) => {
+  //       console.log("WebSocket connection closed", event.code)
+  //       if (event.code !== 1000) {
+  //         router.push(`/payment/failed`)
+  //       }
+  //     }
 
-      return () => {
-        socket.close()
-      }
-    }
-  }, [orderInfo.id, router])
+  //     return () => {
+  //       socket.close()
+  //     }
+  //   }
+  // }, [orderInfo.id, router])
 
   const handlePaymentStatus = (status: string) => {
     switch (status) {
@@ -84,6 +84,16 @@ const Resume = () => {
       default:
         console.log(`Unhandled status: ${status}`)
     }
+  }
+  function getCurrentDateTime() {
+    const now = new Date()
+    const day = String(now.getDate()).padStart(2, "0")
+    const month = String(now.getMonth() + 1).padStart(2, "0")
+    const year = now.getFullYear()
+    const hours = String(now.getHours()).padStart(2, "0")
+    const minutes = String(now.getMinutes()).padStart(2, "0")
+
+    return `${day}/${month}/${year} ${hours}:${minutes}`
   }
 
   return (
@@ -103,7 +113,7 @@ const Resume = () => {
             <strong>Comercio:</strong> Comercio de pruebas Samega
           </p>
           <p>
-            <strong>Fecha:</strong> {Date.now()}
+            <strong>Fecha:</strong> {getCurrentDateTime()}
           </p>
           <hr />
           <p>
