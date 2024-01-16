@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 // import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Currency } from "@/types"
+import Image from "next/image"
 
 const PaymentForm = () => {
   const router = useRouter()
@@ -77,16 +78,16 @@ const PaymentForm = () => {
     getCurriencies()
   }, [])
 
-  const filteredCurrencies = currencies.filter((currency) => currency.symbol.toLowerCase().includes(search.toLowerCase()))
+  const filteredCurrencies = currencies.filter((currency) => currency.name.toLowerCase().includes(search.toLowerCase()))
 
   const isValidCoin = () => {
-    const selectedCurrency = currencies.find((currency) => currency.symbol === coin)
+    const selectedCurrency = currencies.find((currency) => currency.name === coin)
     return !!selectedCurrency
   }
 
-  const handleCurrencySelect = (symbol: string) => {
-    setCoin(symbol)
-    setSearch(symbol)
+  const handleCurrencySelect = (name: string) => {
+    setCoin(name)
+    setSearch(name)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,8 +129,14 @@ const PaymentForm = () => {
           {showDropdown && (
             <div className="absolute bg-white border mt-1 rounded">
               {filteredCurrencies.map((currency, index) => (
-                <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer" onMouseDown={() => handleCurrencySelect(currency.symbol)}>
-                  {currency.symbol}
+                <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                  {currency.image && (
+                    <Image src={currency.image} width={1} height={1} alt={currency.name} className="w-full h-auto max-w-full mr-2" />
+                  )}
+                  <div>
+                    <span>{currency.name}</span>
+                    <span className="text-slate-400">{currency.symbol}</span>
+                  </div>
                 </div>
               ))}
             </div>
