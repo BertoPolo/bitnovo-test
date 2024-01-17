@@ -28,7 +28,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   return (
     <div className="p-6">
       <h3>Realiza el pago</h3>
-      <div>
+      <div className="flex items-center">
         <span>
           <svg
             stroke="currentColor"
@@ -49,19 +49,35 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         </span>
         <span>{formatTimeLeft()}</span>
       </div>
-      <br />
-      <button className={`btn ${selectedMode === "qr" ? "btn-primary" : "btn-light"}`} onClick={() => setSelectedMode("qr")}>
+      <button className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`} onClick={() => setSelectedMode("qr")}>
         Smart QR
       </button>
-      <button className={`btn ${selectedMode === "web3" ? "btn-primary" : "btn-light"}`} onClick={() => setSelectedMode("web3")}>
+      <button
+        className={`btn px-2 py-1 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
+        onClick={() => setSelectedMode("web3")}
+      >
         Web3
       </button>
       <QRCode value={orderInfo.paymentUri} />
       <br />
-      <p>
-        Enviar <b>{}</b>
-        {/* orderInfo.expected_input_amount ??*/}
-      </p>
+      <div>
+        <p>
+          Enviar <b>{}</b>
+          {/* orderInfo.expected_input_amount ??*/}
+          <svg
+            stroke="currentColor"
+            fill="currentColor"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path fill="none" d="M0 0h24v24H0z"></path>
+            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+          </svg>
+        </p>
+      </div>
     </div>
   )
 }
