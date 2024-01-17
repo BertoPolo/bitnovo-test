@@ -9,7 +9,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
   const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
   const [selectedMode, setSelectedMode] = useState("qr")
-
+  console.log(orderInfo)
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed/timeout`)
 
@@ -61,10 +61,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       <QRCode value={orderInfo.paymentUri} />
       <br />
       <div>
-        <p>
+        <p className="flex">
           Enviar <b>{}</b>
           {/* orderInfo.expected_input_amount ??*/}
           <svg
+            className="cursor-pointer"
             stroke="currentColor"
             fill="currentColor"
             stroke-width="0"

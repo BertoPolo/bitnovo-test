@@ -9,7 +9,7 @@ const PaymentForm = () => {
   const router = useRouter()
 
   const [coin, setCoin] = useState("")
-  const [paymentUri, setPaymentUri] = useState("")
+  // const [paymentUri, setPaymentUri] = useState("")
   const [price, setPrice] = useState(0)
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState<Currency[]>([])
@@ -129,7 +129,11 @@ const PaymentForm = () => {
           {showDropdown && (
             <div className="absolute bg-white border mt-1 rounded">
               {filteredCurrencies.map((currency, index) => (
-                <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                <div
+                  key={index}
+                  className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                  onClick={() => handleCurrencySelect(currency.name)}
+                >
                   {currency.image && <Image src={currency.image} width={20} height={20} alt={currency.name} className=" h-auto max-w-full mr-2" />}
                   <div>
                     <p>{currency.name}</p>
