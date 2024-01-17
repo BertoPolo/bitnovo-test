@@ -8,6 +8,8 @@ import { OrderInfo } from "@/types"
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
   const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
+  const [selectedMode, setSelectedMode] = useState("qr")
+
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed/timeout`)
 
@@ -24,8 +26,8 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
 
   return (
-    <div>
-      <h2>Realiza el pago</h2>
+    <div className="p-6">
+      <h3>Realiza el pago</h3>
       <div>
         <span>
           <svg
@@ -48,8 +50,10 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         <span>{formatTimeLeft()}</span>
       </div>
       <br />
-      <button className="btn btn-primary">Smart QR</button>
-      <button className="btn btn-primary" disabled>
+      <button className={`btn ${selectedMode === "qr" ? "btn-primary" : "btn-light"}`} onClick={() => setSelectedMode("qr")}>
+        Smart QR
+      </button>
+      <button className={`btn ${selectedMode === "web3" ? "btn-primary" : "btn-light"}`} onClick={() => setSelectedMode("web3")}>
         Web3
       </button>
       <QRCode value={orderInfo.paymentUri} />
@@ -137,10 +141,10 @@ const Resume = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col md:flex-row gap-4 p-4 bg-white shadow-lg rounded-lg">
-        <div className="flex-1">
-          <h2>Resumen del pedido</h2>
+    <div className="flex justify-center items-center min-h-screen ">
+      <div className="flex flex-col md:flex-row gap-4 p-4 bg-white shadow-lg rounded-lg ">
+        <div className="flex-1 p-6 bg-slate-100">
+          <h3>Resumen del pedido</h3>
           <p>
             <strong>Importe:</strong> {orderInfo.price} EUR
           </p>
