@@ -130,12 +130,10 @@ const PaymentForm = () => {
             <div className="absolute bg-white border mt-1 rounded">
               {filteredCurrencies.map((currency, index) => (
                 <div key={index} className="p-2 hover:bg-gray-100 cursor-pointer flex items-center">
-                  {currency.image && (
-                    <Image src={currency.image} width={1} height={1} alt={currency.name} className="w-full h-auto max-w-full mr-2" />
-                  )}
+                  {currency.image && <Image src={currency.image} width={20} height={20} alt={currency.name} className=" h-auto max-w-full mr-2" />}
                   <div>
-                    <span>{currency.name}</span>
-                    <span className="text-slate-400">{currency.symbol}</span>
+                    <p>{currency.name}</p>
+                    <small className="text-slate-400">{currency.symbol}</small>
                   </div>
                 </div>
               ))}

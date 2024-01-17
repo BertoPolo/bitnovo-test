@@ -25,6 +25,9 @@ h3 {
   font-size: large;
   font-weight: bolder;
 }
+small {
+  font-size: smaller;
+}
 .tick {
   background-color: greenyellow;
   color: green;
