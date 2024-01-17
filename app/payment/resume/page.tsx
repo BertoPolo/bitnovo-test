@@ -133,7 +133,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           {/* "copied" tootip */}
           {isUriCopied && (
             <div
-              className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+              className={`absolute bottom-12 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
                 isUriCopied ? "opacity-100 scale-100" : ""
               }`}
             >
@@ -288,26 +288,43 @@ const Resume = () => {
       <div className="flex flex-col md:flex-row gap-4  bg-white ">
         <div className="flex-1 ">
           <h3>Resumen del pedido</h3>
-
           <div className="p-6 bg-slate-100 rounded-md">
-            <p>
-              <strong>Importe:</strong> {orderInfo.price} EUR
-            </p>
+            <div className="flex justify-between">
+              <div className="w-1/2">
+                <p>
+                  <strong>Importe:</strong>
+                </p>
+                <p>
+                  <strong>Moneda seleccionada:</strong>
+                </p>
+              </div>
+              <div className="w-1/2">
+                <p>{orderInfo.price} EUR</p>
+                <p>{orderInfo.coin}</p>
+              </div>
+            </div>
             <hr />
-            <p>
-              <strong>Moneda seleccionada:</strong> {orderInfo.coin}
-            </p>
+            <div className="flex justify-between">
+              <div className="w-1/2">
+                <p>
+                  <strong>Comercio:</strong>
+                </p>
+                <p>
+                  <strong>Fecha:</strong>
+                </p>
+              </div>
+              <div className="w-1/2">
+                <p>Comercio de pruebas Samega</p>
+                <p>{getCurrentDateTime()}</p>
+              </div>
+            </div>
             <hr />
-            <p>
-              <strong>Comercio:</strong> Comercio de pruebas Samega
-            </p>
-            <p>
-              <strong>Fecha:</strong> {getCurrentDateTime()}
-            </p>
-            <hr />
-            <p>
-              <strong>Concepto:</strong> {orderInfo.concept}
-            </p>
+            <div className="w-1/2">
+              <p>
+                <strong>Concepto:</strong>
+              </p>
+              <p>{orderInfo.concept}</p>
+            </div>
           </div>
         </div>
         <div className="flex-1">
