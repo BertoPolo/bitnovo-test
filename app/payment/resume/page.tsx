@@ -9,7 +9,9 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
   const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
   const [selectedMode, setSelectedMode] = useState("qr")
-  const [isCopied, setIsCopied] = useState(false)
+  const [isTagCopied, setIsTagCopied] = useState(false)
+  const [isUriCopied, setIsUriCopied] = useState(false)
+  const [isCoinCopied, setIsCoinCopied] = useState(false)
   // console.log(orderInfo)
 
   useEffect(() => {
@@ -23,8 +25,9 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-    setIsCopied(true)
-    setTimeout(() => setIsCopied(false), 2000)
+    setTimeout(() => setIsTagCopied(false), 2000)
+    setTimeout(() => setIsUriCopied(false), 2000)
+    setTimeout(() => setIsCoinCopied(false), 2000)
   }
   const formatTimeLeft = () => {
     const minutes = Math.floor(timeLeft / 60)
@@ -56,9 +59,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         </span>
         <span>{formatTimeLeft()}</span>
       </div>
+
       <button className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`} onClick={() => setSelectedMode("qr")}>
         Smart QR
       </button>
+
       <button
         className={`btn px-2 py-1 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
         onClick={() => setSelectedMode("web3")}
@@ -73,28 +78,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         <p>Enviar</p>
         <b className="ml-2">{orderInfo.expected_input_amount}</b>
         <span>{orderInfo.coin}</span>
-        <svg
-          onClick={() => handleCopyToClipboard(orderInfo.expected_input_amount)}
-          className="cursor-pointer"
-          stroke="currentColor"
-          fill="currentColor"
-          strokeWidth="0"
-          viewBox="0 0 24 24"
-          height="1em"
-          width="1em"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path fill="none" d="M0 0h24v24H0z"></path>
-          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
-        </svg>
-      </div>
-
-      {/* address */}
-      <p className="flex">
-        <span>{orderInfo.paymentUri}</span>
-        <span>
+        <div className="relative">
           <svg
-            onClick={() => handleCopyToClipboard(orderInfo.paymentUri)}
+            onClick={() => {
+              handleCopyToClipboard(orderInfo.expected_input_amount)
+              setIsCoinCopied(true)
+            }}
             className="cursor-pointer"
             stroke="currentColor"
             fill="currentColor"
@@ -107,8 +96,52 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path fill="none" d="M0 0h24v24H0z"></path>
             <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
           </svg>
-        </span>
-      </p>
+          {/* "copied" tootip */}
+          {isCoinCopied && (
+            <div
+              className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+                isCoinCopied ? "opacity-100 scale-100" : ""
+              }`}
+            >
+              <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* address */}
+      <div className="flex">
+        <span>{orderInfo.paymentUri}</span>
+        <div className="relative">
+          <svg
+            onClick={() => {
+              handleCopyToClipboard(orderInfo.paymentUri)
+              setIsUriCopied(true)
+            }}
+            className="cursor-pointer"
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path fill="none" d="M0 0h24v24H0z"></path>
+            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+          </svg>
+          {/* "copied" tootip */}
+          {isUriCopied && (
+            <div
+              className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+                isUriCopied ? "opacity-100 scale-100" : ""
+              }`}
+            >
+              <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/*  memo tag*/}
       {orderInfo.tag_memo && (
@@ -118,8 +151,8 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             fill="yellow"
             strokeWidth="2"
             viewBox="0 0 24 24"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             height="1em"
             width="1em"
             xmlns="http://www.w3.org/2000/svg"
@@ -131,25 +164,35 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           </svg>
           <span> Etiqueta de destino:</span>
           <span>{orderInfo.tag_memo}</span>
-          <svg
-            onClick={() => handleCopyToClipboard(orderInfo.tag_memo)}
-            className="cursor-pointer"
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path fill="none" d="M0 0h24v24H0z"></path>
-            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
-          </svg>
-        </div>
-      )}
-      {isCopied && (
-        <div className="absolute top-0 left-0 transform -translate-y-full opacity-0 transition-opacity duration-500 ease-in-out">
-          <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+          <div className="relative">
+            <svg
+              onClick={() => {
+                handleCopyToClipboard(orderInfo.tag_memo)
+                setIsTagCopied(true)
+              }}
+              className="cursor-pointer"
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fill="none" d="M0 0h24v24H0z"></path>
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+            </svg>
+            {/* "copied" tootip */}
+            {isTagCopied && (
+              <div
+                className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+                  isTagCopied ? "opacity-100 scale-100" : ""
+                }`}
+              >
+                <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -242,27 +285,30 @@ const Resume = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen ">
-      <div className="flex flex-col md:flex-row gap-4 p-4 bg-white shadow-lg rounded-lg ">
-        <div className="flex-1 p-6 bg-slate-100">
+      <div className="flex flex-col md:flex-row gap-4  bg-white ">
+        <div className="flex-1 ">
           <h3>Resumen del pedido</h3>
-          <p>
-            <strong>Importe:</strong> {orderInfo.price} EUR
-          </p>
-          <hr />
-          <p>
-            <strong>Moneda seleccionada:</strong> {orderInfo.coin}
-          </p>
-          <hr />
-          <p>
-            <strong>Comercio:</strong> Comercio de pruebas Samega
-          </p>
-          <p>
-            <strong>Fecha:</strong> {getCurrentDateTime()}
-          </p>
-          <hr />
-          <p>
-            <strong>Concepto:</strong> {orderInfo.concept}
-          </p>
+
+          <div className="p-6 bg-slate-100 rounded-md">
+            <p>
+              <strong>Importe:</strong> {orderInfo.price} EUR
+            </p>
+            <hr />
+            <p>
+              <strong>Moneda seleccionada:</strong> {orderInfo.coin}
+            </p>
+            <hr />
+            <p>
+              <strong>Comercio:</strong> Comercio de pruebas Samega
+            </p>
+            <p>
+              <strong>Fecha:</strong> {getCurrentDateTime()}
+            </p>
+            <hr />
+            <p>
+              <strong>Concepto:</strong> {orderInfo.concept}
+            </p>
+          </div>
         </div>
         <div className="flex-1">
           <PaymentQR orderInfo={orderInfo} />
