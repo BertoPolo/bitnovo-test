@@ -39,10 +39,14 @@ const PaymentForm = () => {
 
         if (response.ok) {
           const data = await response.json()
-          console.log(data)
+          console.log("return data from POST ", data)
           router.push(
             `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
-          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(data.payment_uri)}`
+          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(
+              data.payment_uri
+            )}&expected_input_amount
+=${encodeURIComponent(data.expected_input_amount)}&tag_memo=${encodeURIComponent(data.tag_memo)}
+`
           )
         } else {
           setError("Please enter a valid amount and currency code to continue")

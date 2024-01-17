@@ -33,7 +33,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           <svg
             stroke="currentColor"
             fill="currentColor"
-            stroke-width="0"
+            strokeWidth="0"
             viewBox="0 0 24 24"
             height="1.2em"
             width="1.2em"
@@ -60,15 +60,36 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       </button>
       <QRCode value={orderInfo.paymentUri} />
       <br />
-      <div>
-        <p className="flex">
-          Enviar <b>{}</b>
-          {/* orderInfo.expected_input_amount ??*/}
+
+      {/* send */}
+      <div className="flex">
+        <p>Enviar</p>
+        <b className="ml-2">{orderInfo.expected_input_amount}</b>
+        <span>{orderInfo.coin}</span>
+        <svg
+          className="cursor-pointer"
+          stroke="currentColor"
+          fill="currentColor"
+          strokeWidth="0"
+          viewBox="0 0 24 24"
+          height="1em"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path fill="none" d="M0 0h24v24H0z"></path>
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+        </svg>
+      </div>
+
+      {/* address */}
+      <p className="flex">
+        <b>{orderInfo.paymentUri}</b>
+        <span>
           <svg
             className="cursor-pointer"
             stroke="currentColor"
             fill="currentColor"
-            stroke-width="0"
+            strokeWidth="0"
             viewBox="0 0 24 24"
             height="1em"
             width="1em"
@@ -77,8 +98,45 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path fill="none" d="M0 0h24v24H0z"></path>
             <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
           </svg>
-        </p>
-      </div>
+        </span>
+      </p>
+
+      {/*  memo tag*/}
+
+      {tag_memo && (
+        <div className="flex">
+          <svg
+            stroke="black"
+            fill="yellow"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0z"></path>
+            <path d="M12 9h.01"></path>
+            <path d="M11 12h1v4h1"></path>
+          </svg>
+          <span> Etiqueta de destino:</span>
+          <svg
+            className="cursor-pointer"
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 24 24"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path fill="none" d="M0 0h24v24H0z"></path>
+            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+          </svg>
+        </div>
+      )}
     </div>
   )
 }
@@ -86,7 +144,15 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 const Resume = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [orderInfo, setOrderInfo] = useState<OrderInfo>({ price: "", coin: "", concept: "", id: "", paymentUri: "" })
+  const [orderInfo, setOrderInfo] = useState<OrderInfo>({
+    price: "",
+    coin: "",
+    concept: "",
+    id: "",
+    paymentUri: "",
+    expected_input_amount: "",
+    tag_memo: "",
+  })
 
   useEffect(() => {
     const price = searchParams.get("price") || ""
@@ -94,7 +160,9 @@ const Resume = () => {
     const concept = searchParams.get("concept") || ""
     const id = searchParams.get("id") || ""
     const paymentUri = searchParams.get("paymentUri") || ""
-    setOrderInfo({ price, coin, concept, id, paymentUri })
+    const expected_input_amount = searchParams.get("expected_input_amount") || ""
+    const tag_memo = searchParams.get("tag_memo") || ""
+    setOrderInfo({ price, coin, concept, id, paymentUri, expected_input_amount, tag_memo })
   }, [searchParams])
 
   // useEffect(() => {

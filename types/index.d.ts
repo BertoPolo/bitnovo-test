@@ -4,6 +4,8 @@ export type OrderInfo = {
   concept: string
   id: string
   paymentUri: string
+  expected_input_amount: string
+  tag_memo: string
 }
 export type Currency = {
   symbol?: string
