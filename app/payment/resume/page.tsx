@@ -9,7 +9,9 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
   const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
   const [selectedMode, setSelectedMode] = useState("qr")
-  console.log(orderInfo)
+  const [isCopied, setIsCopied] = useState(false)
+  // console.log(orderInfo)
+
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed/timeout`)
 
@@ -19,6 +21,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     return () => clearInterval(intervalId)
   }, [timeLeft])
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    setIsCopied(true)
+    setTimeout(() => setIsCopied(false), 2000)
+  }
   const formatTimeLeft = () => {
     const minutes = Math.floor(timeLeft / 60)
     const seconds = timeLeft % 60
@@ -67,6 +74,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         <b className="ml-2">{orderInfo.expected_input_amount}</b>
         <span>{orderInfo.coin}</span>
         <svg
+          onClick={() => handleCopyToClipboard(orderInfo.expected_input_amount)}
           className="cursor-pointer"
           stroke="currentColor"
           fill="currentColor"
@@ -83,9 +91,10 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
       {/* address */}
       <p className="flex">
-        <b>{orderInfo.paymentUri}</b>
+        <span>{orderInfo.paymentUri}</span>
         <span>
           <svg
+            onClick={() => handleCopyToClipboard(orderInfo.paymentUri)}
             className="cursor-pointer"
             stroke="currentColor"
             fill="currentColor"
@@ -102,8 +111,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       </p>
 
       {/*  memo tag*/}
-
-      {tag_memo && (
+      {orderInfo.tag_memo && (
         <div className="flex">
           <svg
             stroke="black"
@@ -122,7 +130,9 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path d="M11 12h1v4h1"></path>
           </svg>
           <span> Etiqueta de destino:</span>
+          <span>{orderInfo.tag_memo}</span>
           <svg
+            onClick={() => handleCopyToClipboard(orderInfo.tag_memo)}
             className="cursor-pointer"
             stroke="currentColor"
             fill="currentColor"
@@ -135,6 +145,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path fill="none" d="M0 0h24v24H0z"></path>
             <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
           </svg>
+        </div>
+      )}
+      {isCopied && (
+        <div className="absolute top-0 left-0 transform -translate-y-full opacity-0 transition-opacity duration-500 ease-in-out">
+          <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
         </div>
       )}
     </div>
