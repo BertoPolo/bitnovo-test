@@ -126,7 +126,7 @@ const PaymentForm = () => {
 
         {/* price */}
         <div className="mb-4 ">
-          <label htmlFor="amount">Importe a pagar</label>
+          <label className="flex">Importe a pagar</label>
           <input
             type="number"
             id="amount"
@@ -152,7 +152,7 @@ const PaymentForm = () => {
             placeholder="Buscar"
           />
           {showDropdown && (
-            <div className="absolute bg-white border mt-1 rounded">
+            <div className="absolute bg-white border mt-1 rounded w-80">
               {filteredCurrencies.map((currency, index) => (
                 <div
                   key={index}
@@ -171,8 +171,9 @@ const PaymentForm = () => {
         </div>
         {/* concept */}
         <div className="mb-4 ">
-          <label htmlFor="concept">Concepto</label>
-          <br />
+          <label className="flex" htmlFor="concept">
+            Concepto
+          </label>
           <input
             type="text"
             id="concept"
