@@ -36,138 +36,59 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
   return (
     <div className="p-6">
-      <h3>Realiza el pago</h3>
-      <div className="flex items-center">
-        <span>
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1.2em"
-            width="1.2em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g id="Clock_2">
-              <g>
-                <path d="M12,21.933A9.933,9.933,0,1,1,21.933,12,9.944,9.944,0,0,1,12,21.933ZM12,3.067A8.933,8.933,0,1,0,20.933,12,8.943,8.943,0,0,0,12,3.067Z"></path>
-                <path d="M18,12.5H12a.429.429,0,0,1-.34-.14c-.01,0-.01-.01-.02-.02A.429.429,0,0,1,11.5,12V6a.5.5,0,0,1,1,0v5.5H18A.5.5,0,0,1,18,12.5Z"></path>
+      <h3 className="mb-2">Realiza el pago</h3>
+      <div className="mt-2 p-6 border flex flex-col justify-center items-center">
+        <div className="my-2 flex justify-center items-center">
+          <span>
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 24 24"
+              height="1.2em"
+              width="1.2em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="Clock_2">
+                <g>
+                  <path d="M12,21.933A9.933,9.933,0,1,1,21.933,12,9.944,9.944,0,0,1,12,21.933ZM12,3.067A8.933,8.933,0,1,0,20.933,12,8.943,8.943,0,0,0,12,3.067Z"></path>
+                  <path d="M18,12.5H12a.429.429,0,0,1-.34-.14c-.01,0-.01-.01-.02-.02A.429.429,0,0,1,11.5,12V6a.5.5,0,0,1,1,0v5.5H18A.5.5,0,0,1,18,12.5Z"></path>
+                </g>
               </g>
-            </g>
-          </svg>
+            </svg>
+          </span>
+          <span>{formatTimeLeft()}</span>
+        </div>
+
+        <div className=" my-4">
+          <button
+            className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`}
+            onClick={() => setSelectedMode("qr")}
+          >
+            Smart QR
+          </button>
+
+          <button
+            className={`btn px-2 py-1 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
+            onClick={() => setSelectedMode("web3")}
+          >
+            Web3
+          </button>
+        </div>
+        <span className="drop-shadow-lg mb-4">
+          <QRCode value={orderInfo.address} />
         </span>
-        <span>{formatTimeLeft()}</span>
-      </div>
 
-      <button className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`} onClick={() => setSelectedMode("qr")}>
-        Smart QR
-      </button>
-
-      <button
-        className={`btn px-2 py-1 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
-        onClick={() => setSelectedMode("web3")}
-      >
-        Web3
-      </button>
-      <QRCode value={orderInfo.address} />
-      <br />
-
-      {/* send */}
-      <div className="flex">
-        <p>Enviar</p>
-        <b className="mx-2">{orderInfo.expected_input_amount}</b>
-        <span className="mr-2">{orderInfo.coin}</span>
-        <div className="relative">
-          <svg
-            onClick={() => {
-              handleCopyToClipboard(orderInfo.expected_input_amount)
-              setIsCoinCopied(true)
-            }}
-            className="cursor-pointer"
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path fill="none" d="M0 0h24v24H0z"></path>
-            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
-          </svg>
-          {/* "copied" tootip */}
-          {isCoinCopied && (
-            <div
-              className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
-                isCoinCopied ? "opacity-100 scale-100" : ""
-              }`}
-            >
-              <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* address */}
-      <div className="flex">
-        <span className="mr-2">{orderInfo.address}</span>
-        <div className="relative ">
-          <svg
-            onClick={() => {
-              handleCopyToClipboard(orderInfo.address)
-              setIsAddressCopied(true)
-            }}
-            className="cursor-pointer"
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path fill="none" d="M0 0h24v24H0z"></path>
-            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
-          </svg>
-          {/* "copied" tootip */}
-          {isAddressCopied && (
-            <div
-              className={`absolute bottom-12 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
-                isAddressCopied ? "opacity-100 scale-100" : ""
-              }`}
-            >
-              <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/*  memo tag*/}
-      {orderInfo.tag_memo && (
+        {/* send */}
         <div className="flex">
-          <svg
-            stroke="black"
-            fill="yellow"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0z"></path>
-            <path d="M12 9h.01"></path>
-            <path d="M11 12h1v4h1"></path>
-          </svg>
-          <span> Etiqueta de destino:</span>
-          <span className="mr-2">{orderInfo.tag_memo}</span>
+          <p>Enviar</p>
+          <b className="mx-2">{orderInfo.expected_input_amount}</b>
+          <span className="mr-2">{orderInfo.coin}</span>
           <div className="relative">
             <svg
               onClick={() => {
-                handleCopyToClipboard(orderInfo.tag_memo)
-                setIsTagCopied(true)
+                handleCopyToClipboard(orderInfo.expected_input_amount)
+                setIsCoinCopied(true)
               }}
               className="cursor-pointer"
               stroke="currentColor"
@@ -182,10 +103,10 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
             </svg>
             {/* "copied" tootip */}
-            {isTagCopied && (
+            {isCoinCopied && (
               <div
                 className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
-                  isTagCopied ? "opacity-100 scale-100" : ""
+                  isCoinCopied ? "opacity-100 scale-100" : ""
                 }`}
               >
                 <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
@@ -193,7 +114,94 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             )}
           </div>
         </div>
-      )}
+
+        {/* address */}
+        <div className="flex">
+          <span className="mr-2">{orderInfo.address}</span>
+          <div className="relative ">
+            <svg
+              onClick={() => {
+                handleCopyToClipboard(orderInfo.address)
+                setIsAddressCopied(true)
+              }}
+              className="cursor-pointer"
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 24 24"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path fill="none" d="M0 0h24v24H0z"></path>
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+            </svg>
+            {/* "copied" tootip */}
+            {isAddressCopied && (
+              <div
+                className={`absolute bottom-12 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+                  isAddressCopied ? "opacity-100 scale-100" : ""
+                }`}
+              >
+                <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/*  memo tag*/}
+        {orderInfo.tag_memo && (
+          <div className="flex">
+            <svg
+              stroke="black"
+              fill="yellow"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              height="1em"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M12.802 2.165l5.575 2.389c.48 .206 .863 .589 1.07 1.07l2.388 5.574c.22 .512 .22 1.092 0 1.604l-2.389 5.575c-.206 .48 -.589 .863 -1.07 1.07l-5.574 2.388c-.512 .22 -1.092 .22 -1.604 0l-5.575 -2.389a2.036 2.036 0 0 1 -1.07 -1.07l-2.388 -5.574a2.036 2.036 0 0 1 0 -1.604l2.389 -5.575c.206 -.48 .589 -.863 1.07 -1.07l5.574 -2.388a2.036 2.036 0 0 1 1.604 0z"></path>
+              <path d="M12 9h.01"></path>
+              <path d="M11 12h1v4h1"></path>
+            </svg>
+            <span> Etiqueta de destino:</span>
+            <span className="mr-2">{orderInfo.tag_memo}</span>
+            <div className="relative">
+              <svg
+                onClick={() => {
+                  handleCopyToClipboard(orderInfo.tag_memo)
+                  setIsTagCopied(true)
+                }}
+                className="cursor-pointer"
+                stroke="currentColor"
+                fill="currentColor"
+                strokeWidth="0"
+                viewBox="0 0 24 24"
+                height="1em"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+              </svg>
+              {/* "copied" tootip */}
+              {isTagCopied && (
+                <div
+                  className={`absolute bottom-6 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
+                    isTagCopied ? "opacity-100 scale-100" : ""
+                  }`}
+                >
+                  <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -348,7 +356,7 @@ const Resume = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="">
           <PaymentQR orderInfo={orderInfo} />
         </div>
       </div>
