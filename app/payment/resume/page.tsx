@@ -9,11 +9,12 @@ import Image from "next/image"
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
-  const [timeLeft, setTimeLeft] = useState(360) //6 min
+  const [timeLeft, setTimeLeft] = useState(900) //15 min
   const [selectedMode, setSelectedMode] = useState("qr")
   const [isTagCopied, setIsTagCopied] = useState(false)
   const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
+  const [cryptoAmount, setCryptoAmount] = useState(false)
 
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed`)
@@ -35,26 +36,32 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     const seconds = timeLeft % 60
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
   }
+  const fetchCryptoAmount = async () => {
+    try {
+      if (orderInfo.identifier) {
+        const response = await fetch(`https://payments.pre-bnvo.com/api/v1/orders/info/${orderInfo.identifier}`, {
+          headers: {
+            "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+          },
+        })
+        if (!response.ok) {
+          throw new Error("La respuesta de la red no fue ok")
+        }
 
-  // const connectWallet = async () => {
-  //   try {
-  //     if (window.ethereum) {
-  //       await window.ethereum.request({ method: "eth_requestAccounts" })
-
-  //       const amountInEther = orderInfo.expected_input_amount
-  //       const amountInWei = Web3.utils.toWei(amountInEther, "ether")
-  //       const ethereumUri = `ethereum:${orderInfo.address}?value=${amountInWei}`
-  //       // const ethereumUri = `${orderInfo.payment_uri}`
-  //       window.open(ethereumUri, "_blank")
-  //     } else {
-  //       console.log("MetaMask no está disponible")
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al conectar con MetaMask:", error)
-  //   }
-  // }
+        const data = await response.json()
+        setCryptoAmount(data.crypto_amount)
+        console.log(data)
+      }
+    } catch (error) {
+      // setError(error.message)
+    }
+  }
+  useEffect(() => {
+    fetchCryptoAmount()
+  }, [])
 
   const connectWallet = async () => {
+    console.log(orderInfo)
     try {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" })
@@ -66,7 +73,8 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const transactionParameters = {
           to: orderInfo.address,
           from: accounts[0],
-          value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
+          // value: orderInfo.expected_input_amount,
+          value: orderInfo.expected_input_amount,
         }
 
         const txHash = await window.ethereum.request({

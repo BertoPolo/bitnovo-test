@@ -21,52 +21,52 @@ const PaymentForm = () => {
   const [maxAmount, setMaxAmount] = useState(0)
 
   const handleSubmit = async () => {
-    // if (isValidCoin()) {
-    const formData = new FormData()
-    formData.append("expected_output_amount", price.toString())
-    formData.append("merchant_urlok", "https://payments.com/success")
-    formData.append("merchant_urlko", "https://payments.com/failed")
-    formData.append("input_currency", coin)
+    if (isValidCoin()) {
+      const formData = new FormData()
+      formData.append("expected_output_amount", price.toString())
+      formData.append("merchant_urlok", "https://payments.com/success")
+      formData.append("merchant_urlko", "https://payments.com/failed")
+      formData.append("input_currency", coin)
 
-    try {
-      const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
-        method: "POST",
-        headers: {
-          "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
-        },
-        body: formData,
-      })
+      try {
+        const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
+          method: "POST",
+          headers: {
+            "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+          },
+          body: formData,
+        })
 
-      if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem(
-          "paymentData",
-          JSON.stringify({
-            price: price,
-            coin: coin,
-            concept: concept,
-            identifier: data.identifier,
-            payment_uri: data.payment_uri,
-            expected_input_amount: data.expected_input_amount,
-            tag_memo: data.tag_memo,
-            address: data.address,
-            image: coinImage,
-          })
-        )
+        if (response.ok) {
+          const data = await response.json()
+          localStorage.setItem(
+            "paymentData",
+            JSON.stringify({
+              price: price,
+              coin: coin,
+              concept: concept,
+              identifier: data.identifier,
+              payment_uri: data.payment_uri,
+              expected_input_amount: data.expected_input_amount,
+              tag_memo: data.tag_memo,
+              address: data.address,
+              image: coinImage,
+            })
+          )
 
-        router.push("/payment/resume")
-      } else {
-        setErrorMessage("Please enter a valid amount and currency code to continue")
-        console.log(errorMessage)
+          router.push("/payment/resume")
+        } else {
+          setErrorMessage("Please enter a valid amount and currency code to continue")
+          console.log(errorMessage)
+        }
+      } catch (error) {
+        console.error("Error al enviar el pedido:", error)
+        setErrorMessage("An error occurred while processing your payment")
       }
-    } catch (error) {
-      console.error("Error al enviar el pedido:", error)
-      setErrorMessage("An error occurred while processing your payment")
+    } else {
+      setErrorMessage("Choose one of the available coins")
+      console.log(errorMessage)
     }
-    // } else {
-    //   setErrorMessage("Choose one of the available coins")
-    //   console.log(errorMessage)
-    // }
   }
 
   const getCurriencies = async () => {
@@ -92,14 +92,15 @@ const PaymentForm = () => {
   const filteredCurrencies = currencies.filter((currency) => currency.name.toLowerCase().includes(search.toLowerCase()))
 
   const isValidCoin = () => {
-    const selectedCurrency = currencies.find((currency) => currency.name === coin)
-    return !!selectedCurrency
+    return currencies.some((currency) => currency.symbol === coin)
   }
 
-  const handleCurrencySelect = (name: string, symbol: string, image: string) => {
+  const handleCurrencySelect = (name: string, symbol: string, image: string, min: number, max: number) => {
     setSearch(name)
     setCoin(symbol)
     setCoinImage(image)
+    setMaxAmount(max)
+    setMinAmount(min)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,6 +126,7 @@ const PaymentForm = () => {
             className="input input-bordered w-full"
             value={price}
             onChange={(e) => setPrice(parseFloat(e.target.value))}
+            min={0.1}
           />
         </div>
         {/* coin selector */}
@@ -147,7 +149,7 @@ const PaymentForm = () => {
                 <div
                   key={index}
                   className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                  onClick={() => handleCurrencySelect(currency.name, currency.symbol, currency.image)}
+                  onClick={() => handleCurrencySelect(currency.name, currency.symbol, currency.image, currency.min_amount, currency.max_amount)}
                 >
                   {currency.image && <Image src={currency.image} width={20} height={20} alt={currency.name} className=" h-auto max-w-full mr-2" />}
                   <div>

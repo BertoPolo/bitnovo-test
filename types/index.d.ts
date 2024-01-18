@@ -13,4 +13,6 @@ export type Currency = {
   symbol: string
   name: string
   image: string
+  min_amount: number
+  max_amount: number
 }
