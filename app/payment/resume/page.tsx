@@ -53,6 +53,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   //     console.error("Error al conectar con MetaMask:", error)
   //   }
   // }
+
   const connectWallet = async () => {
     try {
       if (window.ethereum) {
@@ -70,7 +71,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         const txHash = await window.ethereum.request({
           method: "eth_sendTransaction",
-          params: [transactionParameters],
+          // params: [transactionParameters],
         })
 
         console.log("Transacción enviada con éxito. Hash:", txHash)
