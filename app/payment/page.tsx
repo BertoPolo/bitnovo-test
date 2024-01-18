@@ -20,7 +20,6 @@ const PaymentForm = () => {
   const [maxAmount, setMaxAmount] = useState(0)
 
   const handleSubmit = async () => {
-    console.log(coin)
     // if (isValidCoin()) {
     const formData = new FormData()
     formData.append("expected_output_amount", price.toString())
@@ -60,6 +59,7 @@ const PaymentForm = () => {
             payment_uri: data.payment_uri,
             expected_input_amount: data.expected_input_amount,
             tag_memo: data.tag_memo,
+            address: data.address,
           })
         )
 

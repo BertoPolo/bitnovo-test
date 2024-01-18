@@ -10,9 +10,8 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [timeLeft, setTimeLeft] = useState(31000) // set as 310 => 5,10min
   const [selectedMode, setSelectedMode] = useState("qr")
   const [isTagCopied, setIsTagCopied] = useState(false)
-  const [isUriCopied, setIsUriCopied] = useState(false)
+  const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
-  // console.log(orderInfo)
 
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed/timeout`)
@@ -26,7 +25,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     setTimeout(() => setIsTagCopied(false), 2000)
-    setTimeout(() => setIsUriCopied(false), 2000)
+    setTimeout(() => setIsAddressCopied(false), 2000)
     setTimeout(() => setIsCoinCopied(false), 2000)
   }
   const formatTimeLeft = () => {
@@ -70,14 +69,14 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       >
         Web3
       </button>
-      <QRCode value={orderInfo.payment_uri} />
+      <QRCode value={orderInfo.address} />
       <br />
 
       {/* send */}
       <div className="flex">
         <p>Enviar</p>
-        <b className="ml-2">{orderInfo.expected_input_amount}</b>
-        <span>{orderInfo.coin}</span>
+        <b className="mx-2">{orderInfo.expected_input_amount}</b>
+        <span className="mr-2">{orderInfo.coin}</span>
         <div className="relative">
           <svg
             onClick={() => {
@@ -111,12 +110,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
       {/* address */}
       <div className="flex">
-        <span>{orderInfo.payment_uri}</span>
-        <div className="relative">
+        <span className="mr-2">{orderInfo.address}</span>
+        <div className="relative ">
           <svg
             onClick={() => {
-              handleCopyToClipboard(orderInfo.payment_uri)
-              setIsUriCopied(true)
+              handleCopyToClipboard(orderInfo.address)
+              setIsAddressCopied(true)
             }}
             className="cursor-pointer"
             stroke="currentColor"
@@ -131,10 +130,10 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
           </svg>
           {/* "copied" tootip */}
-          {isUriCopied && (
+          {isAddressCopied && (
             <div
               className={`absolute bottom-12 left-0 opacity-0 transform scale-95 transition-opacity duration-300 ease-in-out ${
-                isUriCopied ? "opacity-100 scale-100" : ""
+                isAddressCopied ? "opacity-100 scale-100" : ""
               }`}
             >
               <div className="bg-black text-white rounded-md p-2 text-xs">Copiado</div>
@@ -163,7 +162,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             <path d="M11 12h1v4h1"></path>
           </svg>
           <span> Etiqueta de destino:</span>
-          <span>{orderInfo.tag_memo}</span>
+          <span className="mr-2">{orderInfo.tag_memo}</span>
           <div className="relative">
             <svg
               onClick={() => {
@@ -210,6 +209,7 @@ const Resume = () => {
     payment_uri: "",
     expected_input_amount: "",
     tag_memo: "",
+    address: "",
   })
   const storedPaymentData = localStorage.getItem("paymentData")
   useEffect(() => {
@@ -224,6 +224,7 @@ const Resume = () => {
         payment_uri: paymentData.payment_uri,
         expected_input_amount: paymentData.expected_input_amount,
         tag_memo: paymentData.tag_memo,
+        address: paymentData.address,
       })
     }
   }, [])
@@ -314,12 +315,14 @@ const Resume = () => {
                   <strong>Moneda seleccionada:</strong>
                 </p>
               </div>
+
               <div className="w-1/2">
                 <p>{orderInfo.price} EUR</p>
                 <p>{orderInfo.coin}</p>
               </div>
             </div>
             <hr />
+
             <div className="flex justify-between">
               <div className="w-1/2">
                 <p>
@@ -328,18 +331,20 @@ const Resume = () => {
                 <p>
                   <strong>Fecha:</strong>
                 </p>
+                <hr />
+                {/* ojo guarrada */}
+                <p>
+                  <strong>Concepto:</strong>
+                </p>
               </div>
+
               <div className="w-1/2">
                 <p>Comercio de pruebas Samega</p>
                 <p>{getCurrentDateTime()}</p>
+                <hr />
+                {/* ojo guarrada */}
+                <p>{orderInfo.concept}</p>
               </div>
-            </div>
-            <hr />
-            <div className="w-1/2">
-              <p>
-                <strong>Concepto:</strong>
-              </p>
-              <p>{orderInfo.concept}</p>
             </div>
           </div>
         </div>

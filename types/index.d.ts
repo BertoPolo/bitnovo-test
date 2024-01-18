@@ -6,6 +6,7 @@ export type OrderInfo = {
   payment_uri: string
   expected_input_amount: string
   tag_memo: string
+  address: string
 }
 export type Currency = {
   symbol: string
