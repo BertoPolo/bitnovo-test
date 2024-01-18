@@ -19,7 +19,7 @@ const PaymentKo = () => {
           </span>
         </div>
 
-        <h3>¡Pago Completado!</h3>
+        <h3>¡Pago Fallido!</h3>
         <p className="mb-6 mt-4">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam aspernatur, voluptatum aliquam pariatur ad tempora tempore nobis volupta
         </p>

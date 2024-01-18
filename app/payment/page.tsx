@@ -80,7 +80,6 @@ const PaymentForm = () => {
       if (response.ok) {
         const data = await response.json()
         setCurrencies(data)
-        console.log(data)
       }
     } catch (error) {
       console.error(error)
