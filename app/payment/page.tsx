@@ -27,10 +27,7 @@ const PaymentForm = () => {
     formData.append("merchant_urlok", "https://payments.com/success")
     formData.append("merchant_urlko", "https://payments.com/failed")
     formData.append("input_currency", coin)
-    // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
-    //   // check coins exact name
-    //   formData.append("", "")
-    // }
+
     try {
       const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
         method: "POST",
@@ -42,14 +39,6 @@ const PaymentForm = () => {
 
       if (response.ok) {
         const data = await response.json()
-        //           console.log("return data from POST ", data)
-        //           router.push(
-        //             `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
-        //           ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(
-        //               data.payment_uri
-        //             )}&expected_input_amount
-        // =${encodeURIComponent(data.expected_input_amount)}&tag_memo=${encodeURIComponent(data.tag_memo)}
-        // `)
         localStorage.setItem(
           "paymentData",
           JSON.stringify({
