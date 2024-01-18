@@ -69,17 +69,15 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const web3 = new Web3(window.ethereum)
 
         const accounts = await web3.eth.getAccounts()
-
+        const amountInEther = String(orderInfo.expected_input_amount) // Asegúrate de que cryptoAmount es una cadena
+        const valueInWei = web3.utils.toWei(amountInEther, "ether")
         const transactionParameters = {
           to: orderInfo.address,
           from: accounts[0],
-          value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
+          // value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
         }
 
-        const txHash = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          // params: [transactionParameters],
-        })
+        const txHash = await web3.eth.sendTransaction(transactionParameters)
 
         console.log("Transacción enviada con éxito. Hash:", txHash)
       } else {
