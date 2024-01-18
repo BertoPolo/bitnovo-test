@@ -73,7 +73,6 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const transactionParameters = {
           to: orderInfo.address,
           from: accounts[0],
-          // value: orderInfo.expected_input_amount,
           value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
         }
 
@@ -139,12 +138,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         {selectedMode === "qr" ? (
           //  qr code
-          <span className="drop-shadow-xl mt-3 mb-7">
+          <span className="drop-shadow-xl mt-3 mb-4">
             <QRCode value={orderInfo.payment_uri} />
           </span>
         ) : (
           // web3 wallet
-          <div className="h-28 border">
+          <div className="h-28 border flex justify-center items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="	" width="8em" height="2em" viewBox="0 0 512 96">
               <path
                 fill="#161616"
@@ -191,7 +190,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         )}
 
         {/* send */}
-        <div className="flex mb-2">
+        <div className="flex mt-3 my-2">
           <p>Enviar</p>
           <b className="mx-2">{orderInfo.expected_input_amount}</b>
           <span className="mr-2">{orderInfo.coin}</span>
