@@ -74,11 +74,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           to: orderInfo.address,
           from: accounts[0],
           // value: orderInfo.expected_input_amount,
-          value: orderInfo.expected_input_amount,
+          value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
         }
 
         const txHash = await window.ethereum.request({
           method: "eth_sendTransaction",
+          params: [transactionParameters],
         })
 
         console.log("Transacción enviada con éxito. Hash:", txHash)
