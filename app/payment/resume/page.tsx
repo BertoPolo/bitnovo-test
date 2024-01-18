@@ -244,52 +244,55 @@ const Resume = () => {
     }
   }, [])
 
-  useEffect(() => {
-    if (orderInfo.identifier) {
-      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.identifier}`)
+  // useEffect(() => {
+  //   if (orderInfo.identifier) {
+  //     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.identifier}`)
 
-      socket.onopen = () => {
-        console.log("WebSocket connection established")
-      }
+  //     socket.onopen = () => {
+  //       console.log("WebSocket connection established")
+  //     }
 
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data)
-        console.log("Received data:", data)
-        handlePaymentStatus(data.status)
-      }
+  //     socket.onmessage = (event) => {
+  //       const data = JSON.parse(event.data)
+  //       console.log("Received data:", data)
+  //       handlePaymentStatus(data.status)
+  //     }
 
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error)
-        router.push(`/payment/failed`)
-      }
+  //     socket.onerror = (error) => {
+  //       console.error("WebSocket error:", error)
+  //       router.push(`/payment/failed`)
+  //     }
 
-      socket.onclose = (event) => {
-        console.log("WebSocket connection closed", event.code)
-        if (event.code !== 1000) {
-          router.push(`/payment/failed`)
-        }
-      }
+  //     socket.onclose = (event) => {
+  //       console.log("WebSocket connection closed", event.code)
+  //       if (event.code !== 1000) {
+  //         router.push(`/payment/failed`)
+  //       }
+  //     }
 
-      return () => {
-        socket.close()
-      }
-    }
-  }, [orderInfo.identifier, router])
+  //     return () => {
+  //       socket.close()
+  //     }
+  //   }
+  // }, [orderInfo.identifier, router])
 
-  const handlePaymentStatus = (status: string) => {
-    switch (status) {
-      case "CO":
-        router.push("/payment/success")
-        break
-      case "NR":
-      case "PE":
-      case "AC":
-        router.push(`/payment/failed`)
-        break
-      default:
-        console.log(`Unhandled status: ${status}`)
-    }
-  }
+  // const handlePaymentStatus = (status: string) => {
+  //   switch (status) {
+  //     case "CO":
+  //       localStorage.removeItem("paymentData")
+  //       router.push("/payment/success")
+  //       break
+  //     case "NR":
+  //     case "PE":
+  //     case "AC":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     default:
+  //       // router.push(`/payment/failed`) ??
+  //       console.log(`Unhandled status: ${status}`)
+  //   }
+  // }
 
   function getCurrentDateTime() {
     const now = new Date()
