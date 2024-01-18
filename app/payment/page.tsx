@@ -16,6 +16,7 @@ const PaymentForm = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [coinImage, setCoinImage] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const [minAmount, setMinAmount] = useState(0)
   const [maxAmount, setMaxAmount] = useState(0)
@@ -28,6 +29,7 @@ const PaymentForm = () => {
       formData.append("merchant_urlko", "https://payments.com/failed")
       formData.append("input_currency", coin)
 
+      setIsLoading(true)
       try {
         const response = await fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
           method: "POST",
@@ -36,7 +38,6 @@ const PaymentForm = () => {
           },
           body: formData,
         })
-
         if (response.ok) {
           const data = await response.json()
           localStorage.setItem(
@@ -57,6 +58,8 @@ const PaymentForm = () => {
           router.push("/payment/resume")
         } else {
           setErrorMessage("Please enter a valid amount and currency code to continue")
+          setIsLoading(false)
+
           console.log(errorMessage)
         }
       } catch (error) {
@@ -175,7 +178,7 @@ const PaymentForm = () => {
           />
         </div>
         <div className="">
-          <button className="btn btn-primary mt-4 w-full " disabled={price === 0 || !coin || !concept} onClick={handleSubmit}>
+          <button className="btn btn-primary mt-4 w-full " disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
             Continuar
           </button>
         </div>

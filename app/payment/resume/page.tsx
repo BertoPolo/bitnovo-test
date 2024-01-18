@@ -36,29 +36,29 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     const seconds = timeLeft % 60
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
   }
-  const fetchCryptoAmount = async () => {
-    try {
-      if (orderInfo.identifier) {
-        const response = await fetch(`https://payments.pre-bnvo.com/api/v1/orders/info/${orderInfo.identifier}`, {
-          headers: {
-            "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
-          },
-        })
-        if (!response.ok) {
-          throw new Error("La respuesta de la red no fue ok")
-        }
+  // const fetchCryptoAmount = async () => {
+  //   try {
+  //     if (orderInfo.identifier) {
+  //       const response = await fetch(`https://payments.pre-bnvo.com/api/v1/orders/info/${orderInfo.identifier}`, {
+  //         headers: {
+  //           "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+  //         },
+  //       })
+  //       if (!response.ok) {
+  //         throw new Error("La respuesta de la red no fue ok")
+  //       }
 
-        const data = await response.json()
-        setCryptoAmount(data.crypto_amount)
-        console.log(data)
-      }
-    } catch (error) {
-      // setError(error.message)
-    }
-  }
-  useEffect(() => {
-    fetchCryptoAmount()
-  }, [])
+  //       const data = await response.json()
+  //       setCryptoAmount(data.crypto_amount)
+  //       console.log(data)
+  //     }
+  //   } catch (error) {
+  //     // setError(error.message)
+  //   }
+  // }
+  // useEffect(() => {
+  //   fetchCryptoAmount()
+  // }, [])
 
   const connectWallet = async () => {
     console.log(orderInfo)
@@ -79,7 +79,6 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         const txHash = await window.ethereum.request({
           method: "eth_sendTransaction",
-          // params: [transactionParameters],
         })
 
         console.log("Transacción enviada con éxito. Hash:", txHash)
