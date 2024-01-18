@@ -131,6 +131,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
               setSelectedMode("web3")
               connectWallet()
             }}
+            disabled={orderInfo.coin !== "ETH_TEST3"}
           >
             Web3
           </button>
