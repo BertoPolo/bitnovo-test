@@ -212,17 +212,21 @@ const Resume = () => {
     tag_memo: "",
   })
   const storedPaymentData = localStorage.getItem("paymentData")
-  if (storedPaymentData) {
-    // Parsear los datos almacenados de JSON a un objeto JavaScript
-    const paymentData = JSON.parse(storedPaymentData)
-    const price = paymentData.price
-    const coin = paymentData.coin
-    const concept = paymentData.concept
-    const identifier = paymentData.identifier
-    const payment_uri = paymentData.payment_uri
-    const expected_input_amount = paymentData.expected_input_amount
-    const tag_memo = paymentData.tag_memo
-  }
+  useEffect(() => {
+    if (storedPaymentData) {
+      const paymentData = JSON.parse(storedPaymentData)
+      setOrderInfo({
+        ...orderInfo,
+        price: paymentData.price,
+        coin: paymentData.coin,
+        concept: paymentData.concept,
+        identifier: paymentData.identifier,
+        payment_uri: paymentData.payment_uri,
+        expected_input_amount: paymentData.expected_input_amount,
+        tag_memo: paymentData.tag_memo,
+      })
+    }
+  }, [])
 
   // useEffect(() => {
   //   const price = searchParams.get("price") || ""
