@@ -7,6 +7,7 @@ export type OrderInfo = {
   expected_input_amount: string
   tag_memo: string
   address: string
+  image: string
 }
 export type Currency = {
   symbol: string

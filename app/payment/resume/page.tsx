@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import QRCode from "qrcode.react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { OrderInfo } from "@/types"
+import Image from "next/image"
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
@@ -14,7 +15,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [isCoinCopied, setIsCoinCopied] = useState(false)
 
   useEffect(() => {
-    if (timeLeft === 0) router.push(`/payment/failed/timeout`)
+    if (timeLeft === 0) router.push(`/payment/failed`)
 
     const intervalId = setInterval(() => {
       setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
@@ -35,7 +36,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
 
   return (
-    <div className="">
+    <div>
       <h3 className="mb-2">Realiza el pago</h3>
       <div className="mt-2 p-6 border flex flex-col justify-center items-center">
         {/* clock */}
@@ -61,17 +62,17 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           <small>{formatTimeLeft()}</small>
         </div>
 
-        {/* qr / w3 */}
+        {/* qr / w3 selector */}
         <div className=" my-4">
           <button
-            className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`}
+            className={`btn btn-sm p-2 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`}
             onClick={() => setSelectedMode("qr")}
           >
             Smart QR
           </button>
 
           <button
-            className={`btn px-2 py-1 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
+            className={`btn btn-sm p-2 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
             onClick={() => setSelectedMode("web3")}
           >
             Web3
@@ -79,7 +80,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         </div>
 
         {/* qr code */}
-        <span className="drop-shadow-xl mb-4">
+        <span className="drop-shadow-xl mt-3 mb-7">
           <QRCode value={orderInfo.address} />
         </span>
 
@@ -222,6 +223,7 @@ const Resume = () => {
     expected_input_amount: "",
     tag_memo: "",
     address: "",
+    image: "",
   })
   useEffect(() => {
     const storedPaymentData = localStorage.getItem("paymentData")
@@ -237,54 +239,42 @@ const Resume = () => {
         expected_input_amount: paymentData.expected_input_amount,
         tag_memo: paymentData.tag_memo,
         address: paymentData.address,
+        image: paymentData.image,
       })
     }
   }, [])
 
-  // useEffect(() => {
-  //   const price = searchParams.get("price") || ""
-  //   const coin = searchParams.get("coin") || ""
-  //   const concept = searchParams.get("concept") || ""
-  //   const id = searchParams.get("id") || ""
-  //   const payment_uri = searchParams.get("paymentUri") || ""
-  //   const expected_input_amount = searchParams.get("expected_input_amount") || ""
-  //   const tag_memo = searchParams.get("tag_memo") || ""
-  //   setOrderInfo({ price, coin, concept, id, paymentUri, expected_input_amount, tag_memo })
-  // }, [searchParams])
+  useEffect(() => {
+    if (orderInfo.identifier) {
+      const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.identifier}`)
 
-  // useEffect(() => {
-  //   if (orderInfo.id) {
-  //     const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.id}`)
+      socket.onopen = () => {
+        console.log("WebSocket connection established")
+      }
 
-  //     socket.onopen = () => {
-  //       console.log("WebSocket connection established")
-  //     }
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        console.log("Received data:", data)
+        handlePaymentStatus(data.status)
+      }
 
-  //     socket.onmessage = (event) => {
-  //       const data = JSON.parse(event.data)
-  //       console.log("Received data:", data)
-  //       handlePaymentStatus(data.status)
-  //     }
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error)
+        router.push(`/payment/failed`)
+      }
 
-  //     socket.onerror = (error) => {
-  //       console.error("WebSocket error:", error)
-  //       router.push(`/payment/failed`)
+      socket.onclose = (event) => {
+        console.log("WebSocket connection closed", event.code)
+        if (event.code !== 1000) {
+          router.push(`/payment/failed`)
+        }
+      }
 
-  //       router.push("/payment-failed")
-  //     }
-
-  //     socket.onclose = (event) => {
-  //       console.log("WebSocket connection closed", event.code)
-  //       if (event.code !== 1000) {
-  //         router.push(`/payment/failed`)
-  //       }
-  //     }
-
-  //     return () => {
-  //       socket.close()
-  //     }
-  //   }
-  // }, [orderInfo.id, router])
+      return () => {
+        socket.close()
+      }
+    }
+  }, [orderInfo.identifier, router])
 
   const handlePaymentStatus = (status: string) => {
     switch (status) {
@@ -294,7 +284,7 @@ const Resume = () => {
       case "NR":
       case "PE":
       case "AC":
-        router.push(`/payment/failed-${status}`)
+        router.push(`/payment/failed`)
         break
       default:
         console.log(`Unhandled status: ${status}`)
@@ -313,54 +303,77 @@ const Resume = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
-      <div className="flex flex-col md:flex-row gap-4  bg-white ">
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="flex gap-4  bg-white ">
         <div className="flex-1 ">
-          <h3>Resumen del pedido</h3>
-          <div className="p-6 bg-slate-100 rounded-md">
+          <h3 className="mb-2">Resumen del pedido</h3>
+          <div className="p-6 pr-9 bg-slate-100 rounded-md">
             <div className="flex justify-between">
-              <div className="w-1/2">
+              <div className="w-1/2 my-2">
                 <p>
                   <strong>Importe:</strong>
                 </p>
-                <p>
-                  <strong>Moneda seleccionada:</strong>
-                </p>
               </div>
 
-              <div className="w-1/2">
-                <p>{orderInfo.price} EUR</p>
-                <p>{orderInfo.coin}</p>
+              <div className="w-1/2 my-2 text-end">
+                <strong>{orderInfo.price} EUR</strong>
               </div>
             </div>
             <hr />
 
             <div className="flex justify-between">
-              <div className="w-1/2">
+              <div className="w-1/2 my-2">
+                <p>
+                  <strong>Moneda seleccionada:</strong>
+                </p>
+              </div>
+
+              <div className="w-1/2 my-2 flex items-center justify-end">
+                {orderInfo.image && <Image src={orderInfo.image} alt="coin" width={20} height={20} />}
+                <span className="ml-2">{orderInfo.coin}</span>
+              </div>
+            </div>
+            <hr />
+
+            <div className="flex justify-between">
+              <div className="w-1/2 my-2">
                 <p>
                   <strong>Comercio:</strong>
                 </p>
+              </div>
+
+              <div className="w-1/2 my-2 text-end">
+                <p>(i)Comercio de pruebas Samega</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="w-1/2 my-2">
                 <p>
                   <strong>Fecha:</strong>
                 </p>
-                <hr />
-                {/* ojo guarrada */}
+              </div>
+
+              <div className="w-1/2 my-2 text-end">
+                <p>{getCurrentDateTime()}</p>
+              </div>
+            </div>
+            <hr />
+
+            <div className="flex justify-between">
+              <div className="w-1/2 my-2">
                 <p>
                   <strong>Concepto:</strong>
                 </p>
               </div>
 
-              <div className="w-1/2">
-                <p>Comercio de pruebas Samega</p>
-                <p>{getCurrentDateTime()}</p>
-                <hr />
-                {/* ojo guarrada */}
+              <div className="w-1/2 my-2 text-end">
                 <p>{orderInfo.concept}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="">
+        <div>
           <PaymentQR orderInfo={orderInfo} />
         </div>
       </div>

@@ -15,6 +15,7 @@ const PaymentForm = () => {
   const [search, setSearch] = useState(coin || "")
   const [showDropdown, setShowDropdown] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const [coinImage, setCoinImage] = useState("")
 
   const [minAmount, setMinAmount] = useState(0)
   const [maxAmount, setMaxAmount] = useState(0)
@@ -24,7 +25,7 @@ const PaymentForm = () => {
     const formData = new FormData()
     formData.append("expected_output_amount", price.toString())
     formData.append("merchant_urlok", "https://payments.com/success")
-    formData.append("merchant_urlko", "https://payments.com/failed/ko")
+    formData.append("merchant_urlko", "https://payments.com/failed")
     formData.append("input_currency", coin)
     // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
     //   // check coins exact name
@@ -60,6 +61,7 @@ const PaymentForm = () => {
             expected_input_amount: data.expected_input_amount,
             tag_memo: data.tag_memo,
             address: data.address,
+            image: coinImage,
           })
         )
 
@@ -106,9 +108,10 @@ const PaymentForm = () => {
     return !!selectedCurrency
   }
 
-  const handleCurrencySelect = (name: string, symbol: string) => {
-    setCoin(symbol)
+  const handleCurrencySelect = (name: string, symbol: string, image: string) => {
     setSearch(name)
+    setCoin(symbol)
+    setCoinImage(image)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +159,7 @@ const PaymentForm = () => {
                 <div
                   key={index}
                   className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                  onClick={() => handleCurrencySelect(currency.name, currency.symbol)}
+                  onClick={() => handleCurrencySelect(currency.name, currency.symbol, currency.image)}
                 >
                   {currency.image && <Image src={currency.image} width={20} height={20} alt={currency.name} className=" h-auto max-w-full mr-2" />}
                   <div>
