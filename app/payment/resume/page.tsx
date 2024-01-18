@@ -35,11 +35,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
 
   return (
-    <div className="p-6">
+    <div className="">
       <h3 className="mb-2">Realiza el pago</h3>
       <div className="mt-2 p-6 border flex flex-col justify-center items-center">
+        {/* clock */}
         <div className="my-2 flex justify-center items-center">
-          <span>
+          <small className="mr-1">
             <svg
               stroke="currentColor"
               fill="currentColor"
@@ -56,10 +57,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
                 </g>
               </g>
             </svg>
-          </span>
-          <span>{formatTimeLeft()}</span>
+          </small>
+          <small>{formatTimeLeft()}</small>
         </div>
 
+        {/* qr / w3 */}
         <div className=" my-4">
           <button
             className={`btn px-2 py-1 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`}
@@ -75,12 +77,14 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             Web3
           </button>
         </div>
-        <span className="drop-shadow-lg mb-4">
+
+        {/* qr code */}
+        <span className="drop-shadow-xl mb-4">
           <QRCode value={orderInfo.address} />
         </span>
 
         {/* send */}
-        <div className="flex">
+        <div className="flex mb-2">
           <p>Enviar</p>
           <b className="mx-2">{orderInfo.expected_input_amount}</b>
           <span className="mr-2">{orderInfo.coin}</span>
@@ -116,7 +120,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         </div>
 
         {/* address */}
-        <div className="flex">
+        <div className="flex mb-2">
           <span className="mr-2">{orderInfo.address}</span>
           <div className="relative ">
             <svg
@@ -219,8 +223,8 @@ const Resume = () => {
     tag_memo: "",
     address: "",
   })
-  const storedPaymentData = localStorage.getItem("paymentData")
   useEffect(() => {
+    const storedPaymentData = localStorage.getItem("paymentData")
     if (storedPaymentData) {
       const paymentData = JSON.parse(storedPaymentData)
       setOrderInfo({
