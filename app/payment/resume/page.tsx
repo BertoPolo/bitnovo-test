@@ -78,7 +78,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         const txHash = await window.ethereum.request({
           method: "eth_sendTransaction",
-          params: [transactionParameters],
+          // params: [transactionParameters],
         })
 
         console.log("Transacción enviada con éxito. Hash:", txHash)
