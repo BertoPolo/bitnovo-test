@@ -116,7 +116,7 @@ const PaymentForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen ">
-      <div className="border-2 p-5 text-center">
+      <div className="shadow-md  p-5 text-center">
         <h3 className="text-xl mb-6">Crear pago</h3>
 
         {/* price */}

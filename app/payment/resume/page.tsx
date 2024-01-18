@@ -92,7 +92,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   return (
     <div>
       <h3 className="mb-2">Realiza el pago</h3>
-      <div className="mt-2 p-6 border flex flex-col justify-center items-center ">
+      <div className="mt-2 p-6 shadow-md  flex flex-col justify-center items-center ">
         {/* clock */}
         <div className="my-2 flex justify-center items-center">
           <span className="mr-1">
