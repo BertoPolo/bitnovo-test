@@ -70,7 +70,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       >
         Web3
       </button>
-      <QRCode value={orderInfo.paymentUri} />
+      <QRCode value={orderInfo.payment_uri} />
       <br />
 
       {/* send */}
@@ -111,11 +111,11 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
       {/* address */}
       <div className="flex">
-        <span>{orderInfo.paymentUri}</span>
+        <span>{orderInfo.payment_uri}</span>
         <div className="relative">
           <svg
             onClick={() => {
-              handleCopyToClipboard(orderInfo.paymentUri)
+              handleCopyToClipboard(orderInfo.payment_uri)
               setIsUriCopied(true)
             }}
             className="cursor-pointer"
@@ -206,22 +206,34 @@ const Resume = () => {
     price: "",
     coin: "",
     concept: "",
-    id: "",
-    paymentUri: "",
+    identifier: "",
+    payment_uri: "",
     expected_input_amount: "",
     tag_memo: "",
   })
+  const storedPaymentData = localStorage.getItem("paymentData")
+  if (storedPaymentData) {
+    // Parsear los datos almacenados de JSON a un objeto JavaScript
+    const paymentData = JSON.parse(storedPaymentData)
+    const price = paymentData.price
+    const coin = paymentData.coin
+    const concept = paymentData.concept
+    const identifier = paymentData.identifier
+    const payment_uri = paymentData.payment_uri
+    const expected_input_amount = paymentData.expected_input_amount
+    const tag_memo = paymentData.tag_memo
+  }
 
-  useEffect(() => {
-    const price = searchParams.get("price") || ""
-    const coin = searchParams.get("coin") || ""
-    const concept = searchParams.get("concept") || ""
-    const id = searchParams.get("id") || ""
-    const paymentUri = searchParams.get("paymentUri") || ""
-    const expected_input_amount = searchParams.get("expected_input_amount") || ""
-    const tag_memo = searchParams.get("tag_memo") || ""
-    setOrderInfo({ price, coin, concept, id, paymentUri, expected_input_amount, tag_memo })
-  }, [searchParams])
+  // useEffect(() => {
+  //   const price = searchParams.get("price") || ""
+  //   const coin = searchParams.get("coin") || ""
+  //   const concept = searchParams.get("concept") || ""
+  //   const id = searchParams.get("id") || ""
+  //   const payment_uri = searchParams.get("paymentUri") || ""
+  //   const expected_input_amount = searchParams.get("expected_input_amount") || ""
+  //   const tag_memo = searchParams.get("tag_memo") || ""
+  //   setOrderInfo({ price, coin, concept, id, paymentUri, expected_input_amount, tag_memo })
+  // }, [searchParams])
 
   // useEffect(() => {
   //   if (orderInfo.id) {

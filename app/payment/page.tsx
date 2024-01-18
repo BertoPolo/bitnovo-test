@@ -15,15 +15,15 @@ const PaymentForm = () => {
   const [currencies, setCurrencies] = useState<Currency[]>([])
   const [search, setSearch] = useState(coin || "")
   const [showDropdown, setShowDropdown] = useState(false)
-  const [error, setError] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleSubmit = async () => {
     if (isValidCoin()) {
       const formData = new FormData()
       formData.append("expected_output_amount", price.toString())
-      formData.append("merchant_urlok", "https://payments.com/ok")
-      formData.append("merchant_urlko", "https://payments.com/ko")
-      formData.append("input_currency", "ETH_TEST3") //coin
+      formData.append("merchant_urlok", "https://payments.com/success")
+      formData.append("merchant_urlko", "https://payments.com/failed/")
+      formData.append("input_currency", coin)
       // if (coin === "XRP" || coin === "XLM" || coin === "ALGO") {
       //   // check coins exact name
       //   formData.append("", "")
@@ -39,25 +39,39 @@ const PaymentForm = () => {
 
         if (response.ok) {
           const data = await response.json()
-          console.log("return data from POST ", data)
-          router.push(
-            `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
-          ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(
-              data.payment_uri
-            )}&expected_input_amount
-=${encodeURIComponent(data.expected_input_amount)}&tag_memo=${encodeURIComponent(data.tag_memo)}
-`
+          //           console.log("return data from POST ", data)
+          //           router.push(
+          //             `/payment/resume?price=${encodeURIComponent(price)}&coin=${encodeURIComponent(coin)}&concept=
+          //           ${encodeURIComponent(concept)}&id=${encodeURIComponent(data.identifier)}&paymentUri=${encodeURIComponent(
+          //               data.payment_uri
+          //             )}&expected_input_amount
+          // =${encodeURIComponent(data.expected_input_amount)}&tag_memo=${encodeURIComponent(data.tag_memo)}
+          // `)
+          localStorage.setItem(
+            "paymentData",
+            JSON.stringify({
+              price: price,
+              coin: coin,
+              concept: concept,
+              identifier: data.identifier,
+              payment_uri: data.payment_uri,
+              expected_input_amount: data.expected_input_amount,
+              tag_memo: data.tag_memo,
+            })
           )
+
+          router.push("/payment/resume")
         } else {
-          setError("Please enter a valid amount and currency code to continue")
+          setErrorMessage("Please enter a valid amount and currency code to continue")
+          console.log(errorMessage)
         }
       } catch (error) {
         console.error("Error al enviar el pedido:", error)
-        setError("An error occurred while processing your payment")
+        setErrorMessage("An error occurred while processing your payment")
       }
     } else {
-      setError("Choose one of the available coins")
-      console.log(error)
+      setErrorMessage("Choose one of the available coins")
+      console.log(errorMessage)
     }
   }
 

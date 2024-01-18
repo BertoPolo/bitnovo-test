@@ -2,8 +2,8 @@ export type OrderInfo = {
   price: string
   coin: string
   concept: string
-  id: string
-  paymentUri: string
+  identifier: string
+  payment_uri: string
   expected_input_amount: string
   tag_memo: string
 }
