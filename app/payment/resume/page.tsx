@@ -69,7 +69,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const web3 = new Web3(window.ethereum)
 
         const accounts = await web3.eth.getAccounts()
-        const amountInEther = String(orderInfo.expected_input_amount) // Asegúrate de que cryptoAmount es una cadena
+        const amountInEther = String(orderInfo.expected_input_amount)
         const valueInWei = web3.utils.toWei(amountInEther, "ether")
         const transactionParameters = {
           to: orderInfo.address,

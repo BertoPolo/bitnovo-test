@@ -13,7 +13,7 @@ const PaymentForm = () => {
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState<Currency[]>([])
   const [search, setSearch] = useState(coin || "")
-  const [showDropdown, setShowDropdown] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(true)
   const [errorMessage, setErrorMessage] = useState("")
   const [coinImage, setCoinImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -156,13 +156,29 @@ const PaymentForm = () => {
               {filteredCurrencies.map((currency, index) => (
                 <div
                   key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                  className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
                   onClick={() => handleCurrencySelect(currency.name, currency.symbol, currency.image, currency.min_amount, currency.max_amount)}
                 >
-                  {currency.image && <Image src={currency.image} width={20} height={20} alt={currency.name} className=" h-auto max-w-full mr-2" />}
+                  <div className="flex">
+                    {currency.image && (
+                      <div className="flex items-center">
+                        <Image src={currency.image} width={28} height={28} alt={currency.name} className="h-auto mr-2" />
+                      </div>
+                    )}
+                    <div>
+                      <p>{currency.name}</p>
+                      <small className="text-slate-400 flex">{currency.symbol}</small>
+                    </div>
+                  </div>
                   <div>
-                    <p>{currency.name}</p>
-                    <small className="text-slate-400">{currency.symbol}</small>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15">
+                      <path
+                        fill="rgb(146, 189, 82)"
+                        fillRule="evenodd"
+                        d="M7.252.066a.5.5 0 0 1 .496 0l7 4A.5.5 0 0 1 15 4.5v.72a10.15 10.15 0 0 1-7.363 9.76a.5.5 0 0 1-.274 0A10.152 10.152 0 0 1 0 5.22V4.5a.5.5 0 0 1 .252-.434zm-.18 10.645l4.318-5.399l-.78-.624l-3.682 4.601L4.32 7.116l-.64.768z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </div>
                 </div>
               ))}
