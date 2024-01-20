@@ -131,15 +131,18 @@ const PaymentForm = () => {
             type="number"
             id="amount"
             placeholder="56.06"
-            className="input input-bordered w-full"
+            className="input mt-1 input-bordered w-full"
             value={price}
             onChange={(e) => setPrice(parseFloat(e.target.value))}
             min={0.1}
           />
         </div>
+
         {/* coin selector */}
         <div className={`mb-4 ${!isLoading && "relative"} text-start`}>
-          <label htmlFor="currency">Seleccionar moneda</label>
+          <label htmlFor="currency" className="mb-1">
+            Seleccionar moneda (I)
+          </label>
           <input
             id="currency"
             type="text"
@@ -185,9 +188,10 @@ const PaymentForm = () => {
             </div>
           )}
         </div>
+
         {/* concept */}
-        <div className="mb-4 ">
-          <label className="flex" htmlFor="concept">
+        <div className="mb-4">
+          <label className="flex mb-1" htmlFor="concept">
             Concepto
           </label>
           <input
@@ -199,8 +203,9 @@ const PaymentForm = () => {
             onChange={(e) => setConcept(e.target.value)}
           />
         </div>
+
         <div>
-          <button className="btn btn-primary mt-4 w-full " disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
+          <button className="btn bgBlue mt-4 w-full " disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
             Continuar
           </button>
         </div>

@@ -14,7 +14,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [isTagCopied, setIsTagCopied] = useState(false)
   const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
-  const [cryptoAmount, setCryptoAmount] = useState(false)
+  // const [cryptoAmount, setCryptoAmount] = useState(false)
 
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed`)
@@ -89,7 +89,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
   return (
     <div className="flex flex-col">
-      <h3 className="mb-2">Realiza el pago</h3>
+      <h3 className="mb-2 text-center md:text-start">Realiza el pago</h3>
       <div className="mt-2 p-6 shadow-md  flex flex-col justify-center items-center ">
         {/* clock */}
         <div className="my-2 flex justify-center items-center">
@@ -434,11 +434,11 @@ const Resume = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen md:flex-row">
-      {/* Left or Up side part */}
+    <div className="md:flex justify-center items-center min-h-screen md:flex-row">
       <div className="md:flex gap-4 bg-white ">
+        {/* Left or Up side part */}
         <div className="flex-1 mb-3">
-          <h3 className="mb-2">Resumen del pedido</h3>
+          <h3 className="mb-2 text-center md:text-start">Resumen del pedido</h3>
           <div className="p-6 pr-9 bg-slate-100 rounded-md">
             {/* importe */}
             <div className="flex justify-between">
@@ -469,6 +469,7 @@ const Resume = () => {
             </div>
             <hr />
 
+            {/* comercio */}
             <div className="flex justify-between">
               <div className="w-1/2 my-2">
                 <p>
@@ -490,10 +491,11 @@ const Resume = () => {
                     </g>
                   </svg>
                 </span>
-                <p className="text-end">Comercio de pruebas Samega</p>
+                <p className="ml-2 text-end">Comercio de pruebas Samega</p>
               </div>
             </div>
 
+            {/* fecha */}
             <div className="flex justify-between">
               <div className="w-1/2 my-2">
                 <p>
@@ -507,6 +509,7 @@ const Resume = () => {
             </div>
             <hr />
 
+            {/* concepto */}
             <div className="flex justify-between">
               <div className="w-1/2 my-2">
                 <p>
@@ -515,7 +518,7 @@ const Resume = () => {
               </div>
 
               <div className="w-1/2 my-2 text-end">
-                <p className="break-words ">{orderInfo.concept}</p>
+                <p className="break-words">{orderInfo.concept}</p>
               </div>
             </div>
           </div>

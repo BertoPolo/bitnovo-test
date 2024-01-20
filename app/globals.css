@@ -24,21 +24,35 @@ body {
 body {
   font-size: small;
   font-family: Tahoma, Arial, sans-serif !important;
+  color: #002859;
 }
+
 h3 {
   font-size: large;
   font-weight: bolder;
 }
+
 small {
   font-size: x-small;
 }
+
 .tick {
   background-color: greenyellow;
   color: green;
   border-radius: 50%;
 }
+
 .cross {
   background-color: rgb(209, 101, 101);
   color: red;
   border-radius: 50%;
+}
+
+label {
+  font-weight: bold;
+}
+
+.bgBlue {
+  background: #035ac5 !important;
+  color: white !important;
 }

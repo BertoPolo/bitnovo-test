@@ -8,17 +8,16 @@ const PaymentOk = () => {
       <div className="bg-white p-6 rounded-lg shadow-md w-1/2 max-w-lg text-center">
         <div className="mb-4 flex items-center justify-center">
           {/* change div for span */}
-          <svg
-            className="w-10 h-10 tick"
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            version="1.2"
-            baseProfile="tiny"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M16.972 6.251c-.967-.538-2.185-.188-2.720.777l-3.713 6.682-2.125-2.125c-.781-.781-2.047-.781-2.828 0-.781.781-.781 2.047 0 2.828l4 4c.378.379.888.587 1.414.587l.277-.020c.621-.087 1.166-.460 1.471-1.009l5-9c.537-.966.189-2.183-.776-2.720z"></path>
+          <svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              opacity="0.4"
+              d="M40 73.8333C58.4095 73.8333 73.3333 58.9095 73.3333 40.5C73.3333 22.0905 58.4095 7.16666 40 7.16666C21.5905 7.16666 6.66667 22.0905 6.66667 40.5C6.66667 58.9095 21.5905 73.8333 40 73.8333Z"
+              fill="#16A34A"
+            />
+            <path
+              d="M35.2667 52.4333C34.6 52.4333 33.9667 52.1667 33.5 51.7L24.0667 42.2667C23.1 41.3 23.1 39.7 24.0667 38.7333C25.0333 37.7667 26.6333 37.7667 27.6 38.7333L35.2667 46.4L52.4 29.2667C53.3667 28.3 54.9667 28.3 55.9333 29.2667C56.9 30.2333 56.9 31.8333 55.9333 32.8L37.0333 51.7C36.5667 52.1667 35.9333 52.4333 35.2667 52.4333Z"
+              fill="#16A34A"
+            />
           </svg>
         </div>
 
@@ -28,7 +27,7 @@ const PaymentOk = () => {
         </p>
 
         <Link href={"/payment"}>
-          <button className="btn btn-primary w-full">Crear nuevo pago</button>
+          <button className="btn bgBlue w-full">Crear nuevo pago</button>
         </Link>
       </div>
     </div>
