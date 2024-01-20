@@ -121,7 +121,7 @@ const PaymentForm = () => {
           <div className="animate-spin w-16 h-16 border-t-4 border-primary-500 rounded-full"></div>
         </div>
       )}
-      <div className="shadow-md  p-5 text-center">
+      <div className="shadow-md p-5 text-center">
         <h3 className="text-xl mb-6">Crear pago</h3>
 
         {/* price */}
@@ -138,12 +138,12 @@ const PaymentForm = () => {
           />
         </div>
         {/* coin selector */}
-        <div className="mb-4 relative text-start">
+        <div className={`mb-4 ${!isLoading && "relative"} text-start`}>
           <label htmlFor="currency">Seleccionar moneda</label>
           <input
             id="currency"
             type="text"
-            className={`input input-bordered w-full`}
+            className="input input-bordered w-full"
             value={search}
             autoComplete="off"
             onChange={handleSearchChange}
