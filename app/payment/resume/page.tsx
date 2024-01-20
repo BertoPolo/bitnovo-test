@@ -94,21 +94,19 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         {/* clock */}
         <div className="my-2 flex justify-center items-center">
           <span className="mr-1">
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              strokeWidth="0"
-              viewBox="0 0 24 24"
-              height="1.2em"
-              width="1.2em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="Clock_2">
-                <g>
-                  <path d="M12,21.933A9.933,9.933,0,1,1,21.933,12,9.944,9.944,0,0,1,12,21.933ZM12,3.067A8.933,8.933,0,1,0,20.933,12,8.943,8.943,0,0,0,12,3.067Z"></path>
-                  <path d="M18,12.5H12a.429.429,0,0,1-.34-.14c-.01,0-.01-.01-.02-.02A.429.429,0,0,1,11.5,12V6a.5.5,0,0,1,1,0v5.5H18A.5.5,0,0,1,18,12.5Z"></path>
-                </g>
-              </g>
+            <svg width="20" height="19" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.5 22.75C7.26 22.75 3 18.49 3 13.25C3 8.01 7.26 3.75 12.5 3.75C17.74 3.75 22 8.01 22 13.25C22 18.49 17.74 22.75 12.5 22.75ZM12.5 5.25C8.09 5.25 4.5 8.84 4.5 13.25C4.5 17.66 8.09 21.25 12.5 21.25C16.91 21.25 20.5 17.66 20.5 13.25C20.5 8.84 16.91 5.25 12.5 5.25Z"
+                fill="#002859"
+              />
+              <path
+                d="M12.5 13.75C12.09 13.75 11.75 13.41 11.75 13V8C11.75 7.59 12.09 7.25 12.5 7.25C12.91 7.25 13.25 7.59 13.25 8V13C13.25 13.41 12.91 13.75 12.5 13.75Z"
+                fill="#002859"
+              />
+              <path
+                d="M15.5 2.75H9.5C9.09 2.75 8.75 2.41 8.75 2C8.75 1.59 9.09 1.25 9.5 1.25H15.5C15.91 1.25 16.25 1.59 16.25 2C16.25 2.41 15.91 2.75 15.5 2.75Z"
+                fill="#002859"
+              />
             </svg>
           </span>
           <span>{formatTimeLeft()}</span>
@@ -116,15 +114,12 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         {/* qr / w3 selector */}
         <div className=" my-4">
-          <button
-            className={`btn btn-sm p-2 rounded-full ${selectedMode === "qr" ? "btn-primary" : "btn-ghost"}`}
-            onClick={() => setSelectedMode("qr")}
-          >
+          <button className={`btn btn-sm mr-1 p-2 rounded-full ${selectedMode === "qr" && "bgBlue"}`} onClick={() => setSelectedMode("qr")}>
             Smart QR
           </button>
 
           <button
-            className={`btn btn-sm p-2 rounded-full ${selectedMode === "web3" ? "btn-primary" : "btn-ghost"}`}
+            className={`btn btn-sm p-2 rounded-full ${selectedMode === "web3" && "bgBlue"}`}
             onClick={() => {
               setSelectedMode("web3")
               connectWallet()
@@ -491,7 +486,7 @@ const Resume = () => {
                     </g>
                   </svg>
                 </span>
-                <p className="ml-2 text-end">Comercio de pruebas Samega</p>
+                <p className="ml-2 text-end whitespace-nowrap md:whitespace-normal">Comercio de pruebas Samega</p>
               </div>
             </div>
 
