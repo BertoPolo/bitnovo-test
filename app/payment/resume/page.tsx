@@ -88,7 +88,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     }
   }
   return (
-    <div>
+    <div className="flex flex-col">
       <h3 className="mb-2">Realiza el pago</h3>
       <div className="mt-2 p-6 shadow-md  flex flex-col justify-center items-center ">
         {/* clock */}
@@ -434,9 +434,10 @@ const Resume = () => {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="flex gap-4 bg-white ">
-        <div className="flex-1">
+    <div className="flex justify-center items-center min-h-screen md:flex-row">
+      {/* Left or Up side part */}
+      <div className="md:flex gap-4 bg-white ">
+        <div className="flex-1 mb-3">
           <h3 className="mb-2">Resumen del pedido</h3>
           <div className="p-6 pr-9 bg-slate-100 rounded-md">
             {/* importe */}
@@ -489,7 +490,7 @@ const Resume = () => {
                     </g>
                   </svg>
                 </span>
-                <p>Comercio de pruebas Samega</p>
+                <p className="text-end">Comercio de pruebas Samega</p>
               </div>
             </div>
 
@@ -514,11 +515,13 @@ const Resume = () => {
               </div>
 
               <div className="w-1/2 my-2 text-end">
-                <p>{orderInfo.concept}</p>
+                <p className="break-words ">{orderInfo.concept}</p>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Right or below side part */}
         <div>
           <PaymentQR orderInfo={orderInfo} />
         </div>

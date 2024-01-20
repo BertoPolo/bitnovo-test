@@ -199,7 +199,7 @@ const PaymentForm = () => {
             onChange={(e) => setConcept(e.target.value)}
           />
         </div>
-        <div className="">
+        <div>
           <button className="btn btn-primary mt-4 w-full " disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
             Continuar
           </button>
