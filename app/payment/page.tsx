@@ -117,7 +117,7 @@ const PaymentForm = () => {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen ">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+        <div className="absolute inset-0 flex items-center justify-center bg-opacity-80">
           <div className="animate-spin w-16 h-16 border-t-4 border-primary-500 rounded-full"></div>
         </div>
       )}

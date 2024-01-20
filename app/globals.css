@@ -56,3 +56,7 @@ label {
   background: #035ac5 !important;
   color: white !important;
 }
+.bgBlue:disabled {
+  background: #c6dffe !important;
+  color: white !important;
+}
