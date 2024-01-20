@@ -432,7 +432,7 @@ const Resume = () => {
     <div className="md:flex justify-center items-center min-h-screen md:flex-row">
       <div className="md:flex gap-4 bg-white ">
         {/* Left or Up side part */}
-        <div className="flex-1 mb-3">
+        <div className="flex-1 my-3 md:mt-0">
           <h3 className="mb-2 text-center md:text-start">Resumen del pedido</h3>
           <div className="p-6 pr-9 bg-slate-100 rounded-md">
             {/* importe */}
