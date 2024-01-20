@@ -13,7 +13,7 @@ const PaymentForm = () => {
   const [concept, setConcept] = useState("")
   const [currencies, setCurrencies] = useState<Currency[]>([])
   const [search, setSearch] = useState(coin || "")
-  const [showDropdown, setShowDropdown] = useState(true)
+  const [showDropdown, setShowDropdown] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const [coinImage, setCoinImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -138,12 +138,12 @@ const PaymentForm = () => {
           />
         </div>
         {/* coin selector */}
-        <div className="mb-4 ">
+        <div className="mb-4 relative text-start">
           <label htmlFor="currency">Seleccionar moneda</label>
           <input
             id="currency"
             type="text"
-            className="input input-bordered w-full"
+            className={`input input-bordered w-full`}
             value={search}
             autoComplete="off"
             onChange={handleSearchChange}
@@ -152,7 +152,7 @@ const PaymentForm = () => {
             placeholder="Buscar"
           />
           {showDropdown && (
-            <div className="absolute bg-white border mt-1 rounded w-80">
+            <div className="absolute bg-white border-0 rounded w-full">
               {filteredCurrencies.map((currency, index) => (
                 <div
                   key={index}
