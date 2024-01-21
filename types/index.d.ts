@@ -8,7 +8,9 @@ export type OrderInfo = {
   tag_memo: string
   address: string
   image: string
+  rate: number
 }
+
 export type Currency = {
   symbol: string
   name: string

@@ -6,6 +6,13 @@ import Web3 from "web3"
 import { useRouter } from "next/navigation"
 import { OrderInfo } from "@/types"
 import Image from "next/image"
+// import { Window as KeplrWindow } from "@keplr-wallet/types"
+
+declare global {
+  interface Window {
+    xfi: any
+  }
+}
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
@@ -13,7 +20,92 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [isTagCopied, setIsTagCopied] = useState(false)
   const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(350) //just in case getTimeLeft is not working properly,default as 350
+  const [timeLeft, setTimeLeft] = useState(350) //just in case getTimeLeft is not working properly, default as 350
+
+  const [isXDEFIInstalled, setIsXDEFIInstalled] = useState(false)
+
+  useEffect(() => {
+    setIsXDEFIInstalled(typeof window.xfi !== "undefined")
+  }, [])
+
+  const connectMultiWallet = async () => {
+    try {
+      if (window.xfi) {
+        let transactionParameters
+        let txHash
+        let userAccount
+
+        switch (orderInfo.coin) {
+          case "ETH_TEST3":
+            if (window.ethereum) {
+              const accountsEth = await window.xfi.ethereum.request({ method: "eth_requestAccounts" })
+              userAccount = accountsEth[0]
+
+              const web3 = new Web3(window.ethereum)
+              const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether") // better dont mix ??
+
+              transactionParameters = {
+                to: orderInfo.address,
+                from: userAccount,
+                value: amountInWei,
+              }
+              txHash = await window.xfi.ethereum.request({
+                method: "eth_sendTransaction",
+                params: [transactionParameters],
+              })
+            }
+            break
+
+          case "BTC_TEST":
+            userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })[0]
+            //  userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })
+            transactionParameters = {
+              feeRate: orderInfo.rate,
+              from: userAccount,
+              recipient: orderInfo.address,
+              amount: Number(orderInfo.expected_input_amount) * 100000000,
+              memo: orderInfo.concept,
+            }
+            txHash = await window.xfi.bitcoin.request({
+              method: "btc_sendTransaction",
+              params: [transactionParameters],
+            })
+            break
+
+          case "BCH_TEST":
+            userAccount = await window.xfi.bitcoinCash.request({ method: "bch_requestAccounts" })[0]
+
+            transactionParameters = {
+              feeRate: orderInfo.rate,
+              from: userAccount,
+              recipient: orderInfo.address,
+              amount: Number(orderInfo.expected_input_amount) * 100000000,
+              memo: orderInfo.concept,
+            }
+
+            txHash = await window.xfi.bitcoinCash.request({
+              method: "bch_sendTransaction",
+              params: [transactionParameters],
+            })
+            break
+
+          case "XRP_TEST":
+            break
+
+          case "USDC_TEST3":
+            break
+        }
+
+        if (txHash) {
+          console.log("Transaction sent. Hash:", txHash)
+        }
+      } else {
+        console.log("XDEFI Wallet not found. Please install the extension.")
+      }
+    } catch (error) {
+      console.error(`Error connecting to XDEFI Wallet for ${orderInfo.coin}:`, error)
+    }
+  }
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -83,6 +175,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     const seconds = timeLeft % 60
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
   }
+
   useEffect(() => {
     getExpireDate()
   }, [orderInfo])
@@ -133,7 +226,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
               setSelectedMode("web3")
               connectMetamaskWalletAndSendPayment()
             }}
-            disabled={orderInfo.coin !== "ETH_TEST3"}
+            // disabled={orderInfo.coin !== "ETH_TEST3"}
           >
             Web3
           </button>
@@ -333,6 +426,7 @@ const Resume = () => {
     tag_memo: "",
     address: "",
     image: "",
+    rate: 0,
   })
 
   //get payment information
