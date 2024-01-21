@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from "react"
-// import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Currency } from "@/types"
 import Image from "next/image"
@@ -18,8 +17,8 @@ const PaymentForm = () => {
   const [coinImage, setCoinImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const [minAmount, setMinAmount] = useState(0)
-  const [maxAmount, setMaxAmount] = useState(0)
+  // const [minAmount, setMinAmount] = useState(0)
+  // const [maxAmount, setMaxAmount] = useState(0)
 
   const handleSubmit = async () => {
     if (isValidCoin()) {
@@ -102,8 +101,8 @@ const PaymentForm = () => {
     setSearch(name)
     setCoin(symbol)
     setCoinImage(image)
-    setMaxAmount(max)
-    setMinAmount(min)
+    // setMaxAmount(max)
+    // setMinAmount(min)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,10 +125,12 @@ const PaymentForm = () => {
 
         {/* price */}
         <div className="mb-4 ">
-          <label className="flex">Importe a pagar</label>
+          <label className="flex" htmlFor="fiatAmount">
+            Importe a pagar
+          </label>
           <input
             type="number"
-            id="amount"
+            name="fiatAmount"
             placeholder="56.06"
             className="input mt-1 input-bordered w-full"
             value={price}
