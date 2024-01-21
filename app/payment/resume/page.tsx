@@ -571,6 +571,7 @@ const Resume = () => {
               <div className="w-1/2 my-2">
                 <p>
                   <strong className="md:mr-12">Comercio:</strong>
+                  {/* fix that margin */}
                 </p>
               </div>
 
