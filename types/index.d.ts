@@ -1,5 +1,5 @@
 export type OrderInfo = {
-  price: string
+  fiat_amount: string
   coin: string
   concept: string
   identifier: string

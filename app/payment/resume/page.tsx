@@ -14,7 +14,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [isTagCopied, setIsTagCopied] = useState(false)
   const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
-  // const [cryptoAmount, setCryptoAmount] = useState(false)
+  // const [cryptoAmount, setCryptoAmount] = useState("")
 
   useEffect(() => {
     if (timeLeft === 0) router.push(`/payment/failed`)
@@ -36,50 +36,29 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
     const seconds = timeLeft % 60
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
   }
-  // const fetchCryptoAmount = async () => {
-  //   try {
-  //     if (orderInfo.identifier) {
-  //       const response = await fetch(`https://payments.pre-bnvo.com/api/v1/orders/info/${orderInfo.identifier}`, {
-  //         headers: {
-  //           "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
-  //         },
-  //       })
-  //       if (!response.ok) {
-  //         throw new Error("La respuesta de la red no fue ok")
-  //       }
 
-  //       const data = await response.json()
-  //       setCryptoAmount(data.crypto_amount)
-  //       console.log(data)
-  //     }
-  //   } catch (error) {
-  //     // setError(error.message)
-  //   }
-  // }
-  // useEffect(() => {
-  //   fetchCryptoAmount()
-  // }, [])
-
-  const connectWallet = async () => {
-    console.log(orderInfo)
+  const connectMetamaskWalletAndSendPayment = async () => {
+    console.log(orderInfo.expected_input_amount)
     try {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" })
-
         const web3 = new Web3(window.ethereum)
-
         const accounts = await web3.eth.getAccounts()
-        const amountInEther = String(orderInfo.expected_input_amount)
-        const valueInWei = web3.utils.toWei(amountInEther, "ether")
+
+        const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether")
+        console.log(amountInWei)
+
         const transactionParameters = {
           to: orderInfo.address,
           from: accounts[0],
-          // value: web3.utils.toWei(orderInfo.expected_input_amount, "ether"),
+          value: amountInWei,
         }
 
-        const txHash = await web3.eth.sendTransaction(transactionParameters)
-
-        console.log("Transacción enviada con éxito. Hash:", txHash)
+        const txHash = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [transactionParameters],
+        })
+        console.log("Transaction sent. Hash:", txHash)
       } else {
         console.log("MetaMask no está disponible")
       }
@@ -87,6 +66,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       console.error("Error al enviar la transacción:", error)
     }
   }
+
   return (
     <div className="flex flex-col">
       <h3 className="mb-2 text-center md:text-start">Realiza el pago</h3>
@@ -122,7 +102,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             className={`btn btn-sm p-2 rounded-full ${selectedMode === "web3" && "bgBlue"}`}
             onClick={() => {
               setSelectedMode("web3")
-              connectWallet()
+              connectMetamaskWalletAndSendPayment()
             }}
             disabled={orderInfo.coin !== "ETH_TEST3"}
           >
@@ -137,7 +117,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           </span>
         ) : (
           // web3 wallet
-          <div className="h-28 border flex justify-center items-center">
+          <div className="h-28 border p-4 flex justify-center items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="	" width="8em" height="2em" viewBox="0 0 512 96">
               <path
                 fill="#161616"
@@ -315,7 +295,7 @@ const Resume = () => {
   const router = useRouter()
 
   const [orderInfo, setOrderInfo] = useState<OrderInfo>({
-    price: "",
+    fiat_amount: "",
     coin: "",
     concept: "",
     identifier: "",
@@ -326,13 +306,14 @@ const Resume = () => {
     image: "",
   })
 
+  //get payment information
   useEffect(() => {
     const storedPaymentData = localStorage.getItem("paymentData")
     if (storedPaymentData) {
       const paymentData = JSON.parse(storedPaymentData)
       setOrderInfo({
         ...orderInfo,
-        price: paymentData.price,
+        fiat_amount: paymentData.price,
         coin: paymentData.coin,
         concept: paymentData.concept,
         identifier: paymentData.identifier,
@@ -345,6 +326,7 @@ const Resume = () => {
     }
   }, [])
 
+  // websocket
   useEffect(() => {
     if (orderInfo.identifier) {
       const socket = new WebSocket(`wss://payments.pre-bnvo.com/ws/${orderInfo.identifier}`)
@@ -357,17 +339,20 @@ const Resume = () => {
         const data = JSON.parse(event.data)
         console.log("Received data:", data)
         handlePaymentStatus(data.status)
+        // send status
       }
 
       socket.onerror = (error) => {
         console.error("WebSocket error:", error)
         router.push(`/payment/failed`)
+        localStorage.removeItem("paymentData")
       }
 
       socket.onclose = (event) => {
         console.log("WebSocket connection closed", event.code)
         if (event.code !== 1000) {
           router.push(`/payment/failed`)
+          localStorage.removeItem("paymentData")
         }
       }
 
@@ -377,44 +362,6 @@ const Resume = () => {
     }
   }, [orderInfo.identifier, router])
 
-  // const handlePaymentStatus = (status: string) => {
-  //   switch (status) {
-  //     case "CO":
-  //       localStorage.removeItem("paymentData")
-  //       router.push("/payment/success")
-  //       break
-  //     case "NR":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "AC":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "IA":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "RF":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "CA":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "OC":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     case "FA":
-  //       localStorage.removeItem("paymentData")
-  //       router.push(`/payment/failed`)
-  //       break
-  //     default:
-  //       console.log(`Unhandled status: ${status}`)
-  //   }
-  // }
   const handlePaymentStatus = (status: string) => {
     switch (status) {
       case "CO":
@@ -427,6 +374,7 @@ const Resume = () => {
       case "CA":
       case "OC":
       case "FA":
+      case "EX":
         router.push(`/payment/failed`)
         break
       default:
@@ -462,7 +410,7 @@ const Resume = () => {
               </div>
 
               <div className="w-1/2 my-2 text-end">
-                <strong>{orderInfo.price} EUR</strong>
+                <strong>{orderInfo.fiat_amount} EUR</strong>
               </div>
             </div>
             <hr />
