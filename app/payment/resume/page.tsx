@@ -115,7 +115,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
 
   const connectMetamaskWalletAndSendPayment = async () => {
-    console.log(orderInfo.expected_input_amount)
+    // console.log(orderInfo.expected_input_amount)
     try {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" })
@@ -570,7 +570,7 @@ const Resume = () => {
             <div className="flex justify-between">
               <div className="w-1/2 my-2">
                 <p>
-                  <strong>Comercio:</strong>
+                  <strong className="md:mr-12">Comercio:</strong>
                 </p>
               </div>
 
