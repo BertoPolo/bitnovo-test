@@ -377,44 +377,62 @@ const Resume = () => {
     }
   }, [orderInfo.identifier, router])
 
+  // const handlePaymentStatus = (status: string) => {
+  //   switch (status) {
+  //     case "CO":
+  //       localStorage.removeItem("paymentData")
+  //       router.push("/payment/success")
+  //       break
+  //     case "NR":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "AC":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "IA":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "RF":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "CA":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "OC":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     case "FA":
+  //       localStorage.removeItem("paymentData")
+  //       router.push(`/payment/failed`)
+  //       break
+  //     default:
+  //       console.log(`Unhandled status: ${status}`)
+  //   }
+  // }
   const handlePaymentStatus = (status: string) => {
     switch (status) {
       case "CO":
-        localStorage.removeItem("paymentData")
         router.push("/payment/success")
         break
       case "NR":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "AC":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "IA":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "RF":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "CA":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "OC":
-        localStorage.removeItem("paymentData")
-        router.push(`/payment/failed`)
-        break
       case "FA":
-        localStorage.removeItem("paymentData")
         router.push(`/payment/failed`)
         break
       default:
-        // router.push(`/payment/failed`) ??
         console.log(`Unhandled status: ${status}`)
     }
+    localStorage.removeItem("paymentData")
   }
 
   function getCurrentDateTime() {
