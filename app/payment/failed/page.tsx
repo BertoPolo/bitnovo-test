@@ -3,6 +3,8 @@ import React from "react"
 import Link from "next/link"
 
 const PaymentKo = () => {
+  // const status = localStorage.getItem("status")
+  // status && console.log(status)
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md w-1/2 max-w-lg text-center">

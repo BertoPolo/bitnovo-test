@@ -9,32 +9,18 @@ import Image from "next/image"
 
 const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const router = useRouter()
-  const [timeLeft, setTimeLeft] = useState(900) //15 min
   const [selectedMode, setSelectedMode] = useState("qr")
   const [isTagCopied, setIsTagCopied] = useState(false)
   const [isAddressCopied, setIsAddressCopied] = useState(false)
   const [isCoinCopied, setIsCoinCopied] = useState(false)
-  // const [cryptoAmount, setCryptoAmount] = useState("")
-
-  useEffect(() => {
-    if (timeLeft === 0) router.push(`/payment/failed`)
-
-    const intervalId = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
-    }, 1000)
-    return () => clearInterval(intervalId)
-  }, [timeLeft])
+  const [timeLeft, setTimeLeft] = useState(350) //just in case getTimeLeft is not working properly,default as 350
+  const [expireDate, setExpireDate] = useState(0)
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     setTimeout(() => setIsTagCopied(false), 2000)
     setTimeout(() => setIsAddressCopied(false), 2000)
     setTimeout(() => setIsCoinCopied(false), 2000)
-  }
-  const formatTimeLeft = () => {
-    const minutes = Math.floor(timeLeft / 60)
-    const seconds = timeLeft % 60
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
   }
 
   const connectMetamaskWalletAndSendPayment = async () => {
@@ -66,6 +52,50 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
       console.error("Error al enviar la transacción:", error)
     }
   }
+
+  const getExpireDate = async () => {
+    try {
+      if (orderInfo.identifier) {
+        const response = await fetch(`https://payments.pre-bnvo.com/api/v1/orders/info/${orderInfo.identifier}`, {
+          headers: {
+            "X-Device-Id": process.env.NEXT_PUBLIC_IDENTIFIER || "",
+          },
+        })
+        if (!response.ok) {
+          throw new Error("La respuesta de la red no fue ok")
+        }
+
+        const data = await response.json()
+        console.log(new Date(data[0].expired_time).getTime())
+
+        const expireTime = new Date(data[0].expired_time).getTime()
+
+        const now = new Date().getTime()
+        const difference = Math.max(0, expireTime - now) / 1000
+
+        setTimeLeft(Math.floor(difference))
+      }
+    } catch (error) {
+      // setError(error.message)
+    }
+  }
+  useEffect(() => {
+    getExpireDate()
+  }, [orderInfo])
+
+  const formatTimeLeft = () => {
+    const minutes = Math.floor(timeLeft / 60)
+    const seconds = timeLeft % 60
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+  }
+  useEffect(() => {
+    if (timeLeft === 0) router.push(`/payment/failed`)
+
+    const intervalId = setInterval(() => {
+      setTimeLeft((prevTimeLeft) => prevTimeLeft - 1)
+    }, 1000)
+    return () => clearInterval(intervalId)
+  }, [timeLeft])
 
   return (
     <div className="flex flex-col">
@@ -339,13 +369,25 @@ const Resume = () => {
         const data = JSON.parse(event.data)
         console.log("Received data:", data)
         handlePaymentStatus(data.status)
-        // send status
+        localStorage.removeItem("paymentData")
+        localStorage.setItem(
+          "status",
+          JSON.stringify({
+            status: data.status,
+          })
+        )
       }
 
       socket.onerror = (error) => {
         console.error("WebSocket error:", error)
         router.push(`/payment/failed`)
         localStorage.removeItem("paymentData")
+        localStorage.setItem(
+          "status",
+          JSON.stringify({
+            status: error,
+          })
+        )
       }
 
       socket.onclose = (event) => {
@@ -375,6 +417,7 @@ const Resume = () => {
       case "OC":
       case "FA":
       case "EX":
+        console.log(`Status: ${status}`)
         router.push(`/payment/failed`)
         break
       default:
@@ -452,7 +495,8 @@ const Resume = () => {
                     </g>
                   </svg>
                 </span>
-                <p className="ml-2 text-end whitespace-nowrap md:whitespace-normal">Comercio de pruebas Samega</p>
+                <p className="ml-2 text-end whitespace-nowrap ">Comercio de pruebas Samega</p>
+                {/* md:whitespace-normal */}
               </div>
             </div>
 

@@ -87,6 +87,7 @@ const PaymentForm = () => {
       console.error(error)
     }
   }
+
   useEffect(() => {
     getCurriencies()
   }, [])
