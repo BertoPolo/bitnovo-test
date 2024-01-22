@@ -45,8 +45,8 @@ To get started with this application:
     <li>XDEFI SDK</li>
     <li>Node.js</li>
     <li>Contribution</li>
-    <li>Contributions to this project are welcome. Please ensure to follow the contribution guidelines outlined in the CONTRIBUTING.md file.</li>
 </ul>
+    
 
 ## License
 
