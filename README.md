@@ -20,17 +20,16 @@ This web application offers a seamless and versatile payment solution, integrati
 To get started with this application:
 
 <ol>
-    <li>Clone the Repository: Use git clone followed by the repository URL.</li>
-    <li>Install Dependencies: Run npm install to install the required dependencies.</li>
-    <li>Set Environment Variables: Configure necessary environment variables in your .env file.</li>
-    <li>Run the Application: Use npm start to run the app in development mode.</li>
+    <li><b>Clone the Repository:</b> Use git clone followed by the repository URL.</li>
+    <li><b>Install Dependencies:</b> Run npm install to install the required dependencies.</li>
+    <li><b>Set Environment Variables:</b> Configure necessary environment variables in your .env file.</li>
+    <li><b>Run the Application:</b> Use npm start to run the app in development mode.</li>
     
 </ol>
 
 ## Usage
 
 <ul>
-    
     <li>Connect your MetaMask or XDEFI Wallet.</li>
     <li>Select the cryptocurrency of your choice.</li>
     <li>Enter the amount in fiat currency and the application will dynamically convert it to the equivalent in the chosen cryptocurrency.</li>
@@ -47,7 +46,6 @@ To get started with this application:
     <li>Node.js</li>
     <li>Contribution</li>
     <li>Contributions to this project are welcome. Please ensure to follow the contribution guidelines outlined in the CONTRIBUTING.md file.</li>
-    
 </ul>
 
 ## License
