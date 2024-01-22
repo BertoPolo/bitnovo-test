@@ -1,40 +1,59 @@
 # Payment Processing Web Application
 
 ## Overview
+
 This web application offers a seamless and versatile payment solution, integrating with multiple cryptocurrencies and wallets. It supports dynamic transaction processing, including Ethereum, Bitcoin, Bitcoin Cash, Ripple, and USDC, with a focus on user-friendliness and security.
 
 ## Features
-Multi-Cryptocurrency Support: Handles transactions in Ethereum, Bitcoin, Bitcoin Cash, Ripple, and USDC.
-Dynamic Wallet Integration: Seamlessly connects with MetaMask and XDEFI Wallets for transaction processing.
-Real-Time Currency Conversion: Converts fiat amounts to cryptocurrency equivalents dynamically.
-User Account Management: Enables users to connect their cryptocurrency wallets and execute transactions.
-Responsive Design: Ensures a smooth user experience across various devices and screen sizes.
+
+<ul>
+    <li><b>Multi-Cryptocurrency Support:</b> Handles transactions in Ethereum, Bitcoin, Bitcoin Cash, Ripple, and USDC.</li>
+    <li><b>Dynamic Wallet Integration:</b> Seamlessly connects with MetaMask and XDEFI Wallets for transaction processing.</li>
+    <li><b>Real-Time Currency Conversion:</b> Converts fiat amounts to cryptocurrency equivalents dynamically.</li>
+    <li><b>User Account Management:</b> Enables users to connect their cryptocurrency wallets and execute transactions.</li>
+    <li><b>Responsive Design:</b> Ensures a smooth user experience across various devices and screen sizes.</li>
+    
+</ul>
 
 ## Getting Started
+
 To get started with this application:
 
-Clone the Repository: Use git clone followed by the repository URL.
-Install Dependencies: Run npm install to install the required dependencies.
-Set Environment Variables: Configure necessary environment variables in your .env file.
-Run the Application: Use npm start to run the app in development mode.
+<ol>
+    <li>Clone the Repository: Use git clone followed by the repository URL.</li>
+    <li>Install Dependencies: Run npm install to install the required dependencies.</li>
+    <li>Set Environment Variables: Configure necessary environment variables in your .env file.</li>
+    <li>Run the Application: Use npm start to run the app in development mode.</li>
+    
+</ol>
 
 ## Usage
-Connect your MetaMask or XDEFI Wallet.
-Select the cryptocurrency of your choice.
-Enter the amount in fiat currency and the application will dynamically convert it to the equivalent in the chosen cryptocurrency.
-Review and execute the transaction through the connected wallet.
+
+<ul>
+    
+    <li>Connect your MetaMask or XDEFI Wallet.</li>
+    <li>Select the cryptocurrency of your choice.</li>
+    <li>Enter the amount in fiat currency and the application will dynamically convert it to the equivalent in the chosen cryptocurrency.</li>
+    <li>Review and execute the transaction through the connected wallet.</li>
+</ul>
 
 ## Technologies Used
-React.js
-Next.js
-Web3.js
-XDEFI SDK
-Node.js
-Contribution
-Contributions to this project are welcome. Please ensure to follow the contribution guidelines outlined in the CONTRIBUTING.md file.
+
+<ul>
+    <li>React.js</li>
+    <li>Next.js</li>
+    <li>Web3.js</li>
+    <li>XDEFI SDK</li>
+    <li>Node.js</li>
+    <li>Contribution</li>
+    <li>Contributions to this project are welcome. Please ensure to follow the contribution guidelines outlined in the CONTRIBUTING.md file.</li>
+    
+</ul>
 
 ## License
+
 This project is licensed under the MIT License.
 
 ## Support
+
 For support and queries, please open an issue in the GitHub issue tracker

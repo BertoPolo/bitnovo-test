@@ -66,6 +66,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
               amount: Number(orderInfo.expected_input_amount) * 100000000,
               memo: orderInfo.concept,
             }
+
             txHash = await window.xfi.bitcoin.request({
               method: "btc_sendTransaction",
               params: [transactionParameters],
@@ -73,7 +74,8 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
             break
 
           case "BCH_TEST":
-            userAccount = await window.xfi.bitcoinCash.request({ method: "bch_requestAccounts" })[0]
+            // userAccount = await window.xfi.bitcoinCash.request({ method: "request_accounts" })[0]
+            userAccount = await window.xfi.bitcoincash.request({ method: "request_accounts" })
 
             transactionParameters = {
               feeRate: orderInfo.rate,
