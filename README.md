@@ -39,13 +39,12 @@ To get started with this application:
 ## Technologies Used
 
 <ul>
+    <li>Node.js</li>
     <li>React.js</li>
     <li>Next.js</li>
     <li>Web3.js</li>
     <li>XDEFI SDK</li>
-    <li>Node.js</li>
-    <li>Contribution</li>
-</ul>
+    </ul>
     
 
 ## License
