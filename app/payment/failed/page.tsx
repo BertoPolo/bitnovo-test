@@ -7,6 +7,8 @@ const PaymentKo = () => {
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
 
+  // make a dictionary in case of differents error
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md w-1/2 max-w-lg text-center">

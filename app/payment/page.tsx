@@ -16,9 +16,8 @@ const PaymentForm = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [coinImage, setCoinImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-
-  // const [minAmount, setMinAmount] = useState(0)
-  // const [maxAmount, setMaxAmount] = useState(0)
+  const [minAmount, setMinAmount] = useState(0)
+  const [maxAmount, setMaxAmount] = useState(0)
 
   const handleSubmit = async () => {
     if (isValidCoin()) {
@@ -102,8 +101,8 @@ const PaymentForm = () => {
     setSearch(name)
     setCoin(symbol)
     setCoinImage(image)
-    // setMaxAmount(max)
-    // setMinAmount(min)
+    setMaxAmount(max)
+    setMinAmount(min)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,7 +135,8 @@ const PaymentForm = () => {
             className="input mt-1 input-bordered w-full"
             value={price}
             onChange={(e) => setPrice(parseFloat(e.target.value))}
-            min={0.1}
+            min={minAmount}
+            max={maxAmount}
           />
         </div>
 
@@ -164,7 +164,7 @@ const PaymentForm = () => {
           <input
             id="currency"
             type="text"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full focus:outline-none"
             value={search}
             autoComplete="off"
             onChange={handleSearchChange}
@@ -173,7 +173,7 @@ const PaymentForm = () => {
             placeholder="Buscar"
           />
           {showDropdown && (
-            <div className="absolute bg-white border-0 rounded w-full">
+            <div className="absolute bg-white border-0 rounded w-full z-10">
               {filteredCurrencies.map((currency, index) => (
                 <div
                   key={index}
