@@ -120,7 +120,7 @@ const PaymentForm = () => {
           <div className="animate-spin w-16 h-16 border-t-4 border-primary-500 rounded-full"></div>
         </div>
       )}
-      <div className="shadow-md p-5 text-center">
+      <div className="shadow-md p-5 text-center rounded-lg">
         <h3 className="text-xl mb-6">Crear pago</h3>
 
         {/* price */}
