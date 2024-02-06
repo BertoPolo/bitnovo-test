@@ -241,7 +241,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
           </span>
         ) : (
           // web3 wallet
-          <div className="h-28 border p-4 flex justify-center items-center">
+          <div className="h-28 border p-4 flex justify-center items-center rounded-lg">
             <svg xmlns="http://www.w3.org/2000/svg" className="	" width="8em" height="2em" viewBox="0 0 512 96">
               <path
                 fill="#161616"

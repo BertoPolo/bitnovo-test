@@ -17,7 +17,7 @@ const PaymentForm = () => {
   const [coinImage, setCoinImage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [minAmount, setMinAmount] = useState(0)
-  const [maxAmount, setMaxAmount] = useState(0)
+  const [maxAmount, setMaxAmount] = useState(100)
 
   const handleSubmit = async () => {
     if (isValidCoin()) {
