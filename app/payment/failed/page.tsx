@@ -1,10 +1,12 @@
 "use client"
 import React from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 const PaymentKo = () => {
-  // const status = localStorage.getItem("status")
-  // status && console.log(status)
+  const searchParams = useSearchParams()
+  const error = searchParams.get("error")
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md w-1/2 max-w-lg text-center">
@@ -26,7 +28,9 @@ const PaymentKo = () => {
 
         <h3>¡Pago Fallido!</h3>
         <p className="mb-6 mt-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam aspernatur, voluptatum aliquam pariatur ad tempora tempore nobis volupta
+          {error
+            ? error
+            : " Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam aspernatur, voluptatum aliquam pariatur ad tempora tempore nobis volupta"}
         </p>
 
         <Link href={"/payment"}>
