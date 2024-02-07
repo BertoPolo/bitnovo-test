@@ -19,6 +19,6 @@ export type Currency = {
   max_amount: number
 }
 
-export type StatusDescriptions = {
+export type StatusDescriptionsInterface = {
   [key: string]: string
 }
