@@ -18,3 +18,7 @@ export type Currency = {
   min_amount: number
   max_amount: number
 }
+
+export type StatusDescriptions = {
+  [key: string]: string
+}

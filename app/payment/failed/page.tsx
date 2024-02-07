@@ -3,11 +3,26 @@ import React from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
+import StatusDescriptions from "@/types"
+
 const PaymentKo = () => {
   const searchParams = useSearchParams()
   const error = searchParams.get("error")
 
-  // make a dictionary in case of differents error
+  const statusDescriptions = {
+    NR: "The payment didn't receive a cryptocurrency symbol yet. (Redirect Gateway Only)",
+    PE: "The payment is waiting to receive the cryptocurrency amount.",
+    AC: "Awaiting Completion - The cryptocurrency amount has been detected in the mempool but not confirmed yet.",
+    IA: "Insufficient Amount - The cryptocurrency amount is lower than the required.",
+    RF: "Refunded - Payment refunded to customer.",
+    CA: "Cancelled - The payment was expired for more than 24 hours.",
+    EX: "Expired - The payment didn't receive any crypto during the expiration time (15 minutes).",
+    OC: "Out of Condition - The payment does not satisfy one of these conditions: Paid on time or full amount.",
+    FA: "Failed - Payment has failed because the transaction didn't confirm.",
+  }
+  const errorDescription: string = statusDescriptions[error]
+
+  //if IA , add button to redirect, fulfill a new request of payment "enviar el monto restante"
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -31,7 +46,7 @@ const PaymentKo = () => {
         <h3>¡Pago Fallido!</h3>
         <p className="mb-6 mt-4">
           {error
-            ? error
+            ? errorDescription
             : " Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam aspernatur, voluptatum aliquam pariatur ad tempora tempore nobis volupta"}
         </p>
 

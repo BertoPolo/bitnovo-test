@@ -23,92 +23,92 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   const [isCoinCopied, setIsCoinCopied] = useState(false)
   const [timeLeft, setTimeLeft] = useState(350) //just in case getTimeLeft is not working properly, default as 350
 
-  const [isXDEFIInstalled, setIsXDEFIInstalled] = useState(false)
+  // const [isXDEFIInstalled, setIsXDEFIInstalled] = useState(false)
 
-  useEffect(() => {
-    setIsXDEFIInstalled(typeof window.xfi !== "undefined")
-  }, [])
+  // useEffect(() => {
+  //   setIsXDEFIInstalled(typeof window.xfi !== "undefined")
+  // }, [])
 
-  const connectMultiWallet = async () => {
-    try {
-      if (window.xfi) {
-        let transactionParameters
-        let txHash
-        let userAccount
+  // const connectMultiWallet = async () => {
+  //   try {
+  //     if (window.xfi) {
+  //       let transactionParameters
+  //       let txHash
+  //       let userAccount
 
-        switch (orderInfo.coin) {
-          case "ETH_TEST3":
-            if (window.ethereum) {
-              const accountsEth = await window.xfi.ethereum.request({ method: "eth_requestAccounts" })
-              userAccount = accountsEth[0]
+  //       switch (orderInfo.coin) {
+  //         case "ETH_TEST3":
+  //           if (window.ethereum) {
+  //             const accountsEth = await window.xfi.ethereum.request({ method: "eth_requestAccounts" })
+  //             userAccount = accountsEth[0]
 
-              const web3 = new Web3(window.ethereum)
-              const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether") // better dont mix ??
+  //             const web3 = new Web3(window.ethereum)
+  //             const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether") // better dont mix ??
 
-              transactionParameters = {
-                to: orderInfo.address,
-                from: userAccount,
-                value: amountInWei,
-              }
-              txHash = await window.xfi.ethereum.request({
-                method: "eth_sendTransaction",
-                params: [transactionParameters],
-              })
-            }
-            break
+  //             transactionParameters = {
+  //               to: orderInfo.address,
+  //               from: userAccount,
+  //               value: amountInWei,
+  //             }
+  //             txHash = await window.xfi.ethereum.request({
+  //               method: "eth_sendTransaction",
+  //               params: [transactionParameters],
+  //             })
+  //           }
+  //           break
 
-          case "BTC_TEST":
-            userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })[0]
-            //  userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })
-            transactionParameters = {
-              feeRate: orderInfo.rate,
-              from: userAccount,
-              recipient: orderInfo.address,
-              amount: Number(orderInfo.expected_input_amount) * 100000000,
-              memo: orderInfo.concept,
-            }
+  //         case "BTC_TEST":
+  //           userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })[0]
+  //           //  userAccount = await window.xfi.bitcoin.request({ method: "btc_requestAccounts" })
+  //           transactionParameters = {
+  //             feeRate: orderInfo.rate,
+  //             from: userAccount,
+  //             recipient: orderInfo.address,
+  //             amount: Number(orderInfo.expected_input_amount) * 100000000,
+  //             memo: orderInfo.concept,
+  //           }
 
-            txHash = await window.xfi.bitcoin.request({
-              method: "btc_sendTransaction",
-              params: [transactionParameters],
-            })
-            break
+  //           txHash = await window.xfi.bitcoin.request({
+  //             method: "btc_sendTransaction",
+  //             params: [transactionParameters],
+  //           })
+  //           break
 
-          case "BCH_TEST":
-            // userAccount = await window.xfi.bitcoinCash.request({ method: "request_accounts" })[0]
-            userAccount = await window.xfi.bitcoincash.request({ method: "request_accounts" })
+  //         case "BCH_TEST":
+  //           // userAccount = await window.xfi.bitcoinCash.request({ method: "request_accounts" })[0]
+  //           userAccount = await window.xfi.bitcoincash.request({ method: "request_accounts" })
 
-            transactionParameters = {
-              feeRate: orderInfo.rate,
-              from: userAccount,
-              recipient: orderInfo.address,
-              amount: Number(orderInfo.expected_input_amount) * 100000000,
-              memo: orderInfo.concept,
-            }
+  //           transactionParameters = {
+  //             feeRate: orderInfo.rate,
+  //             from: userAccount,
+  //             recipient: orderInfo.address,
+  //             amount: Number(orderInfo.expected_input_amount) * 100000000,
+  //             memo: orderInfo.concept,
+  //           }
 
-            txHash = await window.xfi.bitcoinCash.request({
-              method: "bch_sendTransaction",
-              params: [transactionParameters],
-            })
-            break
+  //           txHash = await window.xfi.bitcoinCash.request({
+  //             method: "bch_sendTransaction",
+  //             params: [transactionParameters],
+  //           })
+  //           break
 
-          case "XRP_TEST":
-            break
+  //         case "XRP_TEST":
+  //           break
 
-          case "USDC_TEST3":
-            break
-        }
+  //         case "USDC_TEST3":
+  //           break
+  //       }
 
-        if (txHash) {
-          console.log("Transaction sent. Hash:", txHash)
-        }
-      } else {
-        console.log("XDEFI Wallet not found. Please install the extension.")
-      }
-    } catch (error) {
-      console.error(`Error connecting to XDEFI Wallet for ${orderInfo.coin}:`, error)
-    }
-  }
+  //       if (txHash) {
+  //         console.log("Transaction sent. Hash:", txHash)
+  //       }
+  //     } else {
+  //       console.log("XDEFI Wallet not found. Please install the extension.")
+  //     }
+  //   } catch (error) {
+  //     console.error(`Error connecting to XDEFI Wallet for ${orderInfo.coin}:`, error)
+  //   }
+  // }
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -125,16 +125,16 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const accounts = await web3.eth.getAccounts()
 
         const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether")
-        console.log(amountInWei)
+        // console.log(amountInWei)
 
-        const gasPrice = await web3.eth.getGasPrice()
+        // const gasPrice = await web3.eth.getGasPrice()
         // console.log(gasPrice)
 
-        const gasEstimate = await web3.eth.estimateGas({
-          to: orderInfo.address,
-          from: accounts[0],
-          value: amountInWei,
-        })
+        // const gasEstimate = await web3.eth.estimateGas({
+        //   to: orderInfo.address,
+        //   from: accounts[0],
+        //   value: amountInWei,
+        // })
         // console.log(gasEstimate)
 
         web3.eth
@@ -526,8 +526,7 @@ const Resume = () => {
       case "OC":
       case "FA":
       case "EX":
-        console.log(`Status: ${status}`)
-        router.push(`/payment/failed`)
+        router.push(`/payment/failed?error=${status}`)
         break
       default:
         console.log(`Unhandled status: ${status}`)
