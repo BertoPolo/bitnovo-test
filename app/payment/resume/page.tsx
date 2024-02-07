@@ -6,6 +6,7 @@ import Web3 from "web3"
 import { useRouter } from "next/navigation"
 import { OrderInfo } from "@/types"
 import Image from "next/image"
+import { getGasPrice } from "web3-eth"
 // import { Window as KeplrWindow } from "@keplr-wallet/types"
 
 declare global {
@@ -117,7 +118,6 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
   }
 
   const connectMetamaskWalletAndSendPayment = async () => {
-    // console.log(orderInfo.expected_input_amount)
     try {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" })
@@ -127,17 +127,28 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         const amountInWei = web3.utils.toWei(String(orderInfo.expected_input_amount), "ether")
         console.log(amountInWei)
 
-        const transactionParameters = {
+        const gasPrice = await web3.eth.getGasPrice()
+        // console.log(gasPrice)
+
+        const gasEstimate = await web3.eth.estimateGas({
           to: orderInfo.address,
           from: accounts[0],
           value: amountInWei,
-        }
-
-        const txHash = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [transactionParameters],
         })
-        console.log("Transaction sent. Hash:", txHash)
+        // console.log(gasEstimate)
+
+        web3.eth
+          .sendTransaction({
+            from: accounts[0],
+            to: orderInfo.address,
+            value: amountInWei,
+            // gas: gasEstimate,
+            gasPrice: "2000000",
+          })
+          .then(function (receipt) {
+            console.log("Transaction sent. Hash:", receipt)
+          })
+        // console.log("Transaction sent. Hash:", txHash)
       } else {
         console.log("MetaMask no está disponible")
       }
