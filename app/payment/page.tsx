@@ -132,7 +132,7 @@ const PaymentForm = () => {
             type="number"
             name="fiatAmount"
             placeholder="56.06"
-            className="input mt-1 input-bordered w-full"
+            className="input mt-1 input-bordered w-full bg-white"
             value={price}
             onChange={(e) => setPrice(parseFloat(e.target.value))}
             min={minAmount}
@@ -141,7 +141,7 @@ const PaymentForm = () => {
         </div>
 
         {/* coin selector */}
-        <div className={`mb-4 ${!isLoading && "relative"} text-start`}>
+        <div className={`mb-4 ${!isLoading && "relative"} text-start `}>
           <label htmlFor="currency " className="mb-1">
             Seleccionar moneda
           </label>
@@ -164,7 +164,7 @@ const PaymentForm = () => {
           <input
             id="currency"
             type="text"
-            className="input input-bordered w-full focus:outline-none"
+            className="input input-bordered w-full focus:outline-none bg-white"
             value={search}
             autoComplete="off"
             onChange={handleSearchChange}
@@ -173,7 +173,7 @@ const PaymentForm = () => {
             placeholder="Buscar"
           />
           {showDropdown && (
-            <div className="absolute bg-white border-0 rounded w-full z-10">
+            <div className="absolute bg-white border-none rounded w-full z-10">
               {filteredCurrencies.map((currency, index) => (
                 <div
                   key={index}
@@ -216,7 +216,7 @@ const PaymentForm = () => {
             type="text"
             id="concept"
             placeholder="Añade descripcion del pago"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full bg-white"
             value={concept}
             onChange={(e) => setConcept(e.target.value)}
             autoComplete="off"
@@ -224,7 +224,7 @@ const PaymentForm = () => {
         </div>
 
         <div>
-          <button className="btn bgBlue mt-4 w-full " disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
+          <button className="btn bgBlue mt-4 w-full border-none" disabled={price === 0 || !coin || !concept || isLoading} onClick={handleSubmit}>
             Continuar
           </button>
         </div>

@@ -218,12 +218,15 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
 
         {/* qr / w3 selector */}
         <div className=" my-4">
-          <button className={`btn btn-sm mr-1 p-2 rounded-full ${selectedMode === "qr" && "bgBlue"}`} onClick={() => setSelectedMode("qr")}>
+          <button
+            className={`btn btn-sm mr-1 p-2 rounded-full border-none ${selectedMode === "qr" && "bgBlue"}`}
+            onClick={() => setSelectedMode("qr")}
+          >
             Smart QR
           </button>
 
           <button
-            className={`btn btn-sm p-2 rounded-full ${selectedMode === "web3" && "bgBlue"}`}
+            className={`btn btn-sm p-2 rounded-full border-none ${selectedMode === "web3" && "bgBlue"}`}
             onClick={() => {
               setSelectedMode("web3")
               connectMetamaskWalletAndSendPayment()
