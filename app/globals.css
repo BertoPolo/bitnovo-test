@@ -2,24 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: white;
-    color: black;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: black;
-    color: white;
-  }
-}
-
 body {
   font-size: small;
   font-family: "Mulish", sans-serif !important;
   color: #002859;
+  background-color: white !important;
 }
 
 h3 {
@@ -29,12 +16,6 @@ h3 {
 
 small {
   font-size: x-small;
-}
-
-.tick {
-  background-color: greenyellow;
-  color: green;
-  border-radius: 50%;
 }
 
 .cross {
@@ -51,6 +32,7 @@ label {
   background: #035ac5 !important;
   color: white !important;
 }
+
 .bgBlue:disabled {
   background: #c6dffe !important;
   color: white !important;
