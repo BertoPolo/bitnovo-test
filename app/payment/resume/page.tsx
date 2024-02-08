@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { OrderInfo } from "@/types"
 import Image from "next/image"
 import { getGasPrice } from "web3-eth"
-// import { Window as KeplrWindow } from "@keplr-wallet/types"
 
 declare global {
   interface Window {
@@ -517,21 +516,24 @@ const Resume = () => {
     switch (status) {
       case "CO":
         router.push("/payment/success")
+        localStorage.removeItem("paymentData")
         break
       case "NR":
       case "AC":
-      case "IA":
       case "RF":
       case "CA":
       case "OC":
       case "FA":
       case "EX":
         router.push(`/payment/failed?error=${status}`)
+        localStorage.removeItem("paymentData")
+        break
+      case "IA":
+        router.push(`/payment/failed?error=${status}`)
         break
       default:
         console.log(`Unhandled status: ${status}`)
     }
-    localStorage.removeItem("paymentData")
   }
 
   function getCurrentDateTime() {

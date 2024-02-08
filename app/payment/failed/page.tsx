@@ -54,6 +54,12 @@ const PaymentKo = () => {
         <Link href={"/payment"}>
           <button className="btn bgBlue w-full">Crear nuevo pago</button>
         </Link>
+
+        {errorType === "IA" && (
+          <Link href={"/resume"}>
+            <button className="btn bgBlue w-full mt-2"> Termina el resto del pago</button>
+          </Link>
+        )}
       </div>
     </div>
   )
