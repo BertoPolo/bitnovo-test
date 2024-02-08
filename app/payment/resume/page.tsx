@@ -169,6 +169,7 @@ const PaymentQR = ({ orderInfo }: { orderInfo: OrderInfo }) => {
         }
 
         const data = await response.json()
+        console.log("refetching data here.", data)
 
         const expireTime = new Date(data[0].expired_time).getTime()
 
