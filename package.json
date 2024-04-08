@@ -20,7 +20,8 @@
     "react-dom": "^18",
     "react-router-dom": "^6.21.1",
     "web3": "^4.4.0",
-    "web3-eth": "^4.4.0"
+    "web3-eth": "^4.4.0",
+    "web3-utils": "^4.2.1"
   },
   "devDependencies": {
     "@keplr-wallet/types": "^0.12.63",
